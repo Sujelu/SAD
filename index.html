@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.A.D. | Arcade Extreme</title>
+    <title>S.A.D. | RoboPlinko</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { height: 100%; overflow: hidden; font-family: 'Courier New', monospace; background: #000; color: #fff; }
@@ -24,18 +24,18 @@
         .combo-text { position: absolute; top: 90px; left: 50%; transform: translateX(-50%); font-size: 56px; font-weight: bold; color: #ff0; text-shadow: 0 0 25px #ff0; opacity: 0; transition: opacity 0.3s; z-index: 60; }
         .sad-logo { position: absolute; top: 15px; right: 15px; font-size: 16px; color: #0ff; text-shadow: 0 0 15px #0ff; z-index: 50; opacity: 0.9; }
         .track-info { position: absolute; bottom: 90px; left: 20px; font-size: 16px; color: #0ff; text-shadow: 0 0 10px #0ff; z-index: 50; }
-        .debug { position: absolute; top: 10px; right: 150px; color: #0f0; font-size: 14px; z-index: 100; background: rgba(0,0,0,0.5); padding: 5px; border-radius: 5px; }
+        .debug { position: absolute; top: 10px; right: 10px; color: #0f0; font-size: 14px; z-index: 100; background: rgba(0,0,0,0.5); padding: 5px; border-radius: 5px; }
     </style>
 </head>
 <body>
 
     <canvas id="plinkoCanvas"></canvas>
 
-    <div class="sad-logo">S.A.D. EXTREME<br>by Dr.Sujelu</div>
-    <div class="debug" id="debug">Audio: In attesa del click...</div>
+    <div class="sad-logo">S.A.D. ARCADE<br>by Dr.Sujelu</div>
+    <div class="debug" id="debug">Audio: In attesa...</div>
 
     <div class="overlay" id="startOverlay">
-        <h1>ROBOPLINKO 02</h1>
+        <h1>ROBOPLINKO 03</h1>
         <h2 style="font-size: 32px; color: #0ff; margin-bottom: 20px;">EXTREME</h2>
         <button id="startButton">INIZIA</button>
         <div style="margin-top: 30px; color: #0ff; font-size: 20px;">
@@ -77,7 +77,6 @@
     <audio id="bounce5" preload="auto"></audio>
     <audio id="bonusClickSound" preload="auto"></audio>
     <audio id="bonusCompleteSound" preload="auto"></audio>
-    <audio id="powerupSpawnSound" preload="auto"></audio  <!-- NON USATO, MA OK -->
     <audio id="powerupCollectSound" preload="auto"></audio>
     <audio id="explosionSound" preload="auto"></audio>
     <audio id="levelUpSound" preload="auto"></audio>
@@ -103,7 +102,7 @@
         const finalScoreDisplay = document.getElementById('finalScore');
         const trackInfo = document.getElementById('trackInfo');
 
-        // === VARIABILI GIOCO ===
+        // === VARIABILI ===
         let score = 0, highScore = 0, remainingBalls = 50, gameOver = false;
         let currentLevel = 1, levelThreshold = 8000;
         let combo = 0, comboMultiplier = 1;
@@ -174,7 +173,7 @@
             trackInfo.innerText = `Livello ${currentLevel} – ${track}`;
         }
 
-        // === FISICA EVOLUTIVA ===
+        // === FISICA ===
         const CHIODINO_RADIUS = 5, PALLINA_RADIUS = 6;
         let GRAVITY_Y = 0.5;
         const ZONE_HEIGHT = 70;
@@ -183,7 +182,6 @@
 
         let CHIODINI = [], PALLINE = [], particles = [];
 
-        // Resize + genera chiodini
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -200,17 +198,12 @@
             for (let y = 0; y < rows; y++) {
                 for (let x = 0; x < cols; x++) {
                     const offsetX = (y % 2 === 0) ? spacingX / 2 : 0;
-                    const bouncePower = 0.8 + (currentLevel - 1) * 0.05; // FLIPPER EFFECT
-                    CHIODINI.push({
-                        x: x * spacingX + offsetX,
-                        y: y * spacingY + 80,
-                        bounce: bouncePower
-                    });
+                    const bouncePower = 0.8 + (currentLevel - 1) * 0.05;
+                    CHIODINI.push({ x: x * spacingX + offsetX, y: y * spacingY + 80, bounce: bouncePower });
                 }
             }
         }
 
-        // Crea pallina
         function createPallina(x) {
             if (remainingBalls <= 0 || gameOver) return;
             PALLINE.push({
@@ -227,7 +220,6 @@
             playSound('dropSound');
         }
 
-        // Update palline
         function updatePalline() {
             PALLINE = PALLINE.filter(p => {
                 if (p.landed) return true;
@@ -235,13 +227,11 @@
                 p.y += p.speedY;
                 p.x += p.speedX;
 
-                // Rimbalzo pareti
                 if (p.x < PALLINA_RADIUS || p.x > canvas.width - PALLINA_RADIUS) {
                     p.speedX *= -0.9;
                     p.x = Math.max(PALLINA_RADIUS, Math.min(canvas.width - PALLINA_RADIUS, p.x));
                 }
 
-                // Rimbalzo chiodini con FLIPPER POWER
                 CHIODINI.forEach(c => {
                     const dx = c.x - p.x;
                     const dy = c.y - p.y;
@@ -256,7 +246,6 @@
                     }
                 });
 
-                // Zona punteggio
                 if (p.y >= canvas.height - ZONE_HEIGHT) {
                     p.landed = true;
                     const zoneIndex = Math.floor(p.x / (canvas.width / SCORE_ZONES.length));
@@ -296,7 +285,7 @@
                 levelThreshold *= 1.8;
                 levelDisplay.innerText = currentLevel;
                 showLevelUp();
-                generateChiodini(); // Ricalcola bounce
+                generateChiodini();
                 playBgTrack();
             }
         }
@@ -341,12 +330,10 @@
             }
         }
 
-        // === DRAW ===
         function draw() {
             ctx.fillStyle = '#111';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Shake
             if (shakeIntensity > 0) {
                 ctx.save();
                 const dx = (Math.random() - 0.5) * shakeIntensity;
@@ -356,7 +343,6 @@
                 if (shakeIntensity < 0.5) shakeIntensity = 0;
             }
 
-            // Chiodini
             CHIODINI.forEach(c => {
                 ctx.beginPath();
                 ctx.arc(c.x, c.y, CHIODINO_RADIUS, 0, Math.PI*2);
@@ -367,7 +353,6 @@
                 ctx.stroke();
             });
 
-            // Palline con glow
             PALLINE.forEach(p => {
                 if (p.landed) return;
                 ctx.save();
@@ -383,7 +368,6 @@
                 ctx.restore();
             });
 
-            // Particelle
             particles = particles.filter(part => {
                 part.x += part.vx;
                 part.y += part.vy;
@@ -399,7 +383,6 @@
             if (shakeIntensity > 0) ctx.restore();
         }
 
-        // === GAME LOOP ===
         function gameLoop() {
             updatePalline();
             draw();
@@ -417,7 +400,6 @@
             }
         }
 
-        // === AVVIO ===
         highScore = parseInt(localStorage.getItem('sadExtremeHiScore') || '0');
         highScoreDisplay.innerText = highScore.toString().padStart(6, '0');
         hiScoreDisplay.innerText = highScore.toString().padStart(6, '0');
@@ -432,14 +414,12 @@
             location.reload();
         });
 
-        // Click per lanciare pallina
         canvas.addEventListener('click', (e) => {
-            if (gameOver || !audioUnlocked) return;
-            const rect = canvas.getBoundingClientRect();
+            if (gameOver) return;
+            const rect = canvas.getBoundingClientRect();  // CORRETTO!
             const x = e.clientX - rect.left;
             createPallina(x);
         });
-
     </script>
 </body>
 </html>
