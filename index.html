@@ -9,8 +9,8 @@
         body, html { height: 100%; overflow: hidden; font-family: 'Courier New', monospace; background: #000; color: #fff; }
         canvas { display: block; background: #111; }
         .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; }
-        .overlay h1 { font-size: 70px; margin-bottom: 20px; text-shadow: 0 0 30px #0ff, 0 0 60px #0ff; animation: glitch 1.5s; }
-        @keyframes glitch { 0%,100% { text-shadow: 0 0 30px #0ff, 0 0 60px #0ff; } 50% { text-shadow: 0 0 40px #f0f, 0 0 80px #f0f; } }
+        .overlay h1 { font-size: 70px; margin-bottom: 20px; text-shadow: 0 0 30px #0ff, 0 0 60px #0ff; animation: glitch 1.5s infinite; }
+        @keyframes glitch { 0%,100% { text-shadow: 0 0 30px #0ff; } 50% { text-shadow: 0 0 40px #f0f; } }
         button { padding: 18px 40px; font-size: 28px; font-weight: bold; color: #000; background: linear-gradient(45deg, #0ff, #0f0); border: none; border-radius: 15px; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 30px #0ff; }
         button:hover { transform: scale(1.15); box-shadow: 0 0 50px #0ff; }
         #info { position: absolute; top: 15px; left: 15px; display: flex; gap: 15px; z-index: 50; }
@@ -68,7 +68,7 @@
     <div class="combo-text" id="comboText"></div>
     <div class="track-info" id="trackInfo">Livello 1 – Intro</div>
 
-    <!-- AUDIO – GARANTITO -->
+    <!-- AUDIO -->
     <audio id="dropSound" preload="auto"></audio>
     <audio id="bounce1" preload="auto"></audio>
     <audio id="bounce2" preload="auto"></audio>
@@ -77,7 +77,7 @@
     <audio id="bounce5" preload="auto"></audio>
     <audio id="bonusClickSound" preload="auto"></audio>
     <audio id="bonusCompleteSound" preload="auto"></audio>
-    <audio id="powerupSpawnSound" preload="auto"></audio>
+    <audio id="powerupSpawnSound" preload="auto"></audio  <!-- NON USATO, MA OK -->
     <audio id="powerupCollectSound" preload="auto"></audio>
     <audio id="explosionSound" preload="auto"></audio>
     <audio id="levelUpSound" preload="auto"></audio>
@@ -103,6 +103,14 @@
         const finalScoreDisplay = document.getElementById('finalScore');
         const trackInfo = document.getElementById('trackInfo');
 
+        // === VARIABILI GIOCO ===
+        let score = 0, highScore = 0, remainingBalls = 50, gameOver = false;
+        let currentLevel = 1, levelThreshold = 8000;
+        let combo = 0, comboMultiplier = 1;
+        let shakeIntensity = 0;
+        let audioUnlocked = false;
+        let currentBounce = 0;
+
         // === AUDIO ===
         const audioFiles = {
             dropSound: "audio/drop.wav",
@@ -113,7 +121,6 @@
             bounce5: "audio/bounce5.wav",
             bonusClickSound: "audio/bonus_click.wav",
             bonusCompleteSound: "audio/bonus_complete.mp3",
-            powerupSpawnSound: "audio/powerup_spawn.wav",
             powerupCollectSound: "audio/powerup_collect.wav",
             explosionSound: "audio/explosion.wav",
             levelUpSound: "audio/level_up.wav",
@@ -121,10 +128,6 @@
         };
 
         const sounds = {};
-        let audioUnlocked = false;
-        let currentBounce = 0;
-
-        // Carica tutti i suoni
         Object.keys(audioFiles).forEach(key => {
             const audio = document.getElementById(key);
             audio.src = audioFiles[key];
@@ -133,36 +136,32 @@
         });
 
         // Sblocca audio al primo click
-        canvas.addEventListener('click', function unlockAudio(e) {
-            if (audioUnlocked) return;
+        canvas.addEventListener('click', unlockAudio, { once: true });
+        function unlockAudio() {
             audioUnlocked = true;
             debug.innerText = "Audio: Sbloccato!";
             debug.style.color = "#0f0";
             playSound('dropSound');
             playBgTrack();
-            canvas.removeEventListener('click', unlockAudio);
-        }, { once: true });
+        }
 
-        // Suoni
         function playSound(id) {
-            if (!audioUnlocked) return;
-            const sound = sounds[id];
-            if (sound) {
-                sound.currentTime = 0;
-                sound.play().catch(() => {});
-            }
+            if (!audioUnlocked || !sounds[id]) return;
+            sounds[id].currentTime = 0;
+            sounds[id].play().catch(() => {});
         }
 
         function playBounce() {
             if (!audioUnlocked) return;
-            const bounceKeys = ['bounce1', 'bounce2', 'bounce3', 'bounce4', 'bounce5'];
-            const sound = sounds[bounceKeys[currentBounce % 5]];
-            sound.currentTime = 0;
-            sound.play().catch(() => {});
+            const keys = ['bounce1', 'bounce2', 'bounce3', 'bounce4', 'bounce5'];
+            const sound = sounds[keys[currentBounce % 5]];
+            if (sound) {
+                sound.currentTime = 0;
+                sound.play().catch(() => {});
+            }
             currentBounce++;
         }
 
-        // Background
         const bgTracks = ["bg1.mp3", "bg2.mp3", "bg3.mp3", "bg4.mp3"];
         function playBgTrack() {
             if (!audioUnlocked) return;
@@ -175,8 +174,272 @@
             trackInfo.innerText = `Livello ${currentLevel} – ${track}`;
         }
 
-        // === COSTANTI ===
-        const CHIODINO_RADIUS = 5, PALLINA_RADIUS = 5;
+        // === FISICA EVOLUTIVA ===
+        const CHIODINO_RADIUS = 5, PALLINA_RADIUS = 6;
         let GRAVITY_Y = 0.5;
         const ZONE_HEIGHT = 70;
-        const SCORE_ZONES = [-500, 10, 20, 0, ...
+        const SCORE_ZONES = [-500, 10, 20, 0, -1000, 5000, -1000, 0, 40, 75, 0];
+        const BALL_ZONES = [3, 7, 10];
+
+        let CHIODINI = [], PALLINE = [], particles = [];
+
+        // Resize + genera chiodini
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            generateChiodini();
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function generateChiodini() {
+            CHIODINI = [];
+            const rows = 18, cols = 22;
+            const spacingX = canvas.width / cols;
+            const spacingY = (canvas.height - ZONE_HEIGHT - 100) / rows;
+            for (let y = 0; y < rows; y++) {
+                for (let x = 0; x < cols; x++) {
+                    const offsetX = (y % 2 === 0) ? spacingX / 2 : 0;
+                    const bouncePower = 0.8 + (currentLevel - 1) * 0.05; // FLIPPER EFFECT
+                    CHIODINI.push({
+                        x: x * spacingX + offsetX,
+                        y: y * spacingY + 80,
+                        bounce: bouncePower
+                    });
+                }
+            }
+        }
+
+        // Crea pallina
+        function createPallina(x) {
+            if (remainingBalls <= 0 || gameOver) return;
+            PALLINE.push({
+                x, y: 10,
+                speedX: (Math.random() - 0.5) * 2,
+                speedY: 0,
+                landed: false,
+                color: `hsl(${currentLevel * 60}, 100%, 60%)`
+            });
+            remainingBalls--;
+            remainingBallsDisplay.innerText = remainingBalls;
+            combo++;
+            showCombo();
+            playSound('dropSound');
+        }
+
+        // Update palline
+        function updatePalline() {
+            PALLINE = PALLINE.filter(p => {
+                if (p.landed) return true;
+                p.speedY += GRAVITY_Y;
+                p.y += p.speedY;
+                p.x += p.speedX;
+
+                // Rimbalzo pareti
+                if (p.x < PALLINA_RADIUS || p.x > canvas.width - PALLINA_RADIUS) {
+                    p.speedX *= -0.9;
+                    p.x = Math.max(PALLINA_RADIUS, Math.min(canvas.width - PALLINA_RADIUS, p.x));
+                }
+
+                // Rimbalzo chiodini con FLIPPER POWER
+                CHIODINI.forEach(c => {
+                    const dx = c.x - p.x;
+                    const dy = c.y - p.y;
+                    const dist = Math.hypot(dx, dy);
+                    if (dist < CHIODINO_RADIUS + PALLINA_RADIUS) {
+                        const angle = Math.atan2(dy, dx);
+                        const force = c.bounce * 1.5;
+                        p.speedX = Math.cos(angle) * force + (Math.random() - 0.5) * 2;
+                        p.speedY = Math.sin(angle) * force - 2;
+                        createParticles(p.x, p.y, 3, '#fff');
+                        playBounce();
+                    }
+                });
+
+                // Zona punteggio
+                if (p.y >= canvas.height - ZONE_HEIGHT) {
+                    p.landed = true;
+                    const zoneIndex = Math.floor(p.x / (canvas.width / SCORE_ZONES.length));
+                    if (BALL_ZONES.includes(zoneIndex)) {
+                        remainingBalls = Math.min(remainingBalls + 1, 50);
+                        remainingBallsDisplay.innerText = remainingBalls;
+                        showScorePopup(p.x, p.y, "+1 BALL!", '#0f0');
+                        playSound('bonusCompleteSound');
+                    } else {
+                        const points = SCORE_ZONES[zoneIndex];
+                        const total = points * combo * comboMultiplier;
+                        score += total;
+                        updateScore();
+                        showScorePopup(p.x, p.y, total > 0 ? `+${total}` : total);
+                    }
+                    combo = 0;
+                    hideCombo();
+                    checkLevelUp();
+                }
+                return p.y < canvas.height + 50;
+            });
+        }
+
+        function updateScore() {
+            scoreDisplay.innerText = score;
+            if (score > highScore) {
+                highScore = score;
+                highScoreDisplay.innerText = highScore.toString().padStart(6, '0');
+                hiScoreDisplay.innerText = highScore.toString().padStart(6, '0');
+                localStorage.setItem('sadExtremeHiScore', highScore);
+            }
+        }
+
+        function checkLevelUp() {
+            if (score >= levelThreshold) {
+                currentLevel++;
+                levelThreshold *= 1.8;
+                levelDisplay.innerText = currentLevel;
+                showLevelUp();
+                generateChiodini(); // Ricalcola bounce
+                playBgTrack();
+            }
+        }
+
+        function showLevelUp() {
+            levelUpMessage.style.opacity = 1;
+            setTimeout(() => levelUpMessage.style.opacity = 0, 1500);
+            playSound('levelUpSound');
+            createParticles(canvas.width/2, canvas.height/2, 60, 'gold');
+            shakeIntensity = 25;
+        }
+
+        function showScorePopup(x, y, text, color = 'gold') {
+            const popup = document.createElement('div');
+            popup.className = 'score-popup';
+            popup.innerText = text;
+            popup.style.left = x + 'px';
+            popup.style.top = y + 'px';
+            popup.style.color = color;
+            document.body.appendChild(popup);
+            setTimeout(() => popup.remove(), 1200);
+        }
+
+        function showCombo() {
+            comboText.innerText = `COMBO x${combo}`;
+            comboText.style.opacity = 1;
+        }
+
+        function hideCombo() {
+            comboText.style.opacity = 0;
+        }
+
+        function createParticles(x, y, count, color) {
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x, y,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: Math.random() * -10 - 5,
+                    life: 30,
+                    color
+                });
+            }
+        }
+
+        // === DRAW ===
+        function draw() {
+            ctx.fillStyle = '#111';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Shake
+            if (shakeIntensity > 0) {
+                ctx.save();
+                const dx = (Math.random() - 0.5) * shakeIntensity;
+                const dy = (Math.random() - 0.5) * shakeIntensity;
+                ctx.translate(dx, dy);
+                shakeIntensity *= 0.9;
+                if (shakeIntensity < 0.5) shakeIntensity = 0;
+            }
+
+            // Chiodini
+            CHIODINI.forEach(c => {
+                ctx.beginPath();
+                ctx.arc(c.x, c.y, CHIODINO_RADIUS, 0, Math.PI*2);
+                ctx.fillStyle = `hsl(${(currentLevel-1)*60}, 100%, 70%)`;
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+            });
+
+            // Palline con glow
+            PALLINE.forEach(p => {
+                if (p.landed) return;
+                ctx.save();
+                ctx.shadowColor = p.color;
+                ctx.shadowBlur = 20;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, PALLINA_RADIUS, 0, Math.PI*2);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.restore();
+            });
+
+            // Particelle
+            particles = particles.filter(part => {
+                part.x += part.vx;
+                part.y += part.vy;
+                part.vy += 0.3;
+                part.life--;
+                ctx.globalAlpha = part.life / 30;
+                ctx.fillStyle = part.color;
+                ctx.fillRect(part.x - 2, part.y - 2, 4, 4);
+                return part.life > 0;
+            });
+            ctx.globalAlpha = 1;
+
+            if (shakeIntensity > 0) ctx.restore();
+        }
+
+        // === GAME LOOP ===
+        function gameLoop() {
+            updatePalline();
+            draw();
+            checkGameOver();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function checkGameOver() {
+            if (remainingBalls <= 0 && PALLINE.every(p => p.landed) && !gameOver) {
+                gameOver = true;
+                finalScoreDisplay.innerText = score;
+                gameOverOverlay.style.display = 'flex';
+                sounds.bgTrack.pause();
+                playSound('gameOverSound');
+            }
+        }
+
+        // === AVVIO ===
+        highScore = parseInt(localStorage.getItem('sadExtremeHiScore') || '0');
+        highScoreDisplay.innerText = highScore.toString().padStart(6, '0');
+        hiScoreDisplay.innerText = highScore.toString().padStart(6, '0');
+
+        startButton.addEventListener('click', () => {
+            startOverlay.style.display = 'none';
+            unlockAudio();
+            gameLoop();
+        });
+
+        restartButton.addEventListener('click', () => {
+            location.reload();
+        });
+
+        // Click per lanciare pallina
+        canvas.addEventListener('click', (e) => {
+            if (gameOver || !audioUnlocked) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            createPallina(x);
+        });
+
+    </script>
+</body>
+</html>
