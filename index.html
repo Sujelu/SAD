@@ -134,9 +134,9 @@
             sounds[key] = audio;
         });
 
-        // Sblocca audio al primo click
-        canvas.addEventListener('click', unlockAudio, { once: true });
+        // Sblocca audio al click su "INIZIA"
         function unlockAudio() {
+            if (audioUnlocked) return;
             audioUnlocked = true;
             debug.innerText = "Audio: Sbloccato!";
             debug.style.color = "#0f0";
@@ -404,10 +404,11 @@
         highScoreDisplay.innerText = highScore.toString().padStart(6, '0');
         hiScoreDisplay.innerText = highScore.toString().padStart(6, '0');
 
+        // === AVVIO CORRETTO ===
         startButton.addEventListener('click', () => {
             startOverlay.style.display = 'none';
-            unlockAudio();
-            gameLoop();
+            unlockAudio();  // Sblocca audio
+            gameLoop();     // Avvia gioco
         });
 
         restartButton.addEventListener('click', () => {
@@ -415,8 +416,8 @@
         });
 
         canvas.addEventListener('click', (e) => {
-            if (gameOver) return;
-            const rect = canvas.getBoundingClientRect();  // CORRETTO!
+            if (gameOver || !audioUnlocked) return;
+            const rect = canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
             createPallina(x);
         });
