@@ -3,29 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.A.D. | RoboPlinko Xtreme</title>
+    <title>S.A.D. | RoboPlinko INFINITE</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { height: 100%; overflow: hidden; font-family: 'Courier New', monospace; background: #000; color: #fff; }
         canvas { display: block; background: #111; }
-        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; }
-        .overlay h1 { font-size: 60px; margin-bottom: 20px; text-shadow: 0 0 20px #0ff, 0 0 40px #0ff; animation: glitch 2s infinite; }
-        @keyframes glitch { 0%,100% { text-shadow: 0 0 20px #0ff, 0 0 40px #0ff; } 50% { text-shadow: 0 0 30px #f0f, 0 0 60px #f0f; } }
-        button { padding: 15px 30px; font-size: 24px; font-weight: bold; color: #000; background: linear-gradient(45deg, #0ff, #0f0); border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 20px #0ff; }
-        button:hover { transform: scale(1.1); box-shadow: 0 0 40px #0ff; }
+        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; }
+        .overlay h1 { font-size: 70px; margin-bottom: 20px; text-shadow: 0 0 30px #0ff, 0 0 60px #0ff; animation: glitch 1.5s infinite; }
+        @keyframes glitch { 0%,100% { text-shadow: 0 0 30px #0ff, 0 0 60px #0ff; } 50% { text-shadow: 0 0 40px #f0f, 0 0 80px #f0f; } }
+        button { padding: 18px 40px; font-size: 28px; font-weight: bold; color: #000; background: linear-gradient(45deg, #0ff, #0f0); border: none; border-radius: 15px; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 30px #0ff; }
+        button:hover { transform: scale(1.15); box-shadow: 0 0 50px #0ff; }
         #info { position: absolute; top: 15px; left: 15px; display: flex; gap: 15px; z-index: 50; }
-        .score-box { background: rgba(0,0,0,0.7); padding: 10px 20px; border-radius: 10px; border: 2px solid #0ff; font-size: 18px; font-weight: bold; min-width: 120px; text-align: center; box-shadow: 0 0 15px #0ff; }
-        .score-zone { position: absolute; bottom: 0; height: 60px; width: 100%; display: flex; border-top: 3px solid #0ff; }
-        .score-zone div { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; background: rgba(0,0,0,0.8); border-left: 1px solid #0ff; border-right: 1px solid #0ff; text-shadow: 0 0 10px #fff; }
-        .level-up { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 80px; font-weight: bold; color: gold; text-shadow: 0 0 30px yellow, 0 0 60px orange; opacity: 0; pointer-events: none; z-index: 90; }
-        .explosion { position: absolute; width: 100px; height: 100px; background: radial-gradient(circle, yellow, orange, red); border-radius: 50%; pointer-events: none; animation: explode 0.6s forwards; z-index: 80; }
-        @keyframes explode { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(4); opacity: 0; } }
-        .score-popup { position: absolute; font-weight: bold; font-size: 24px; color: gold; text-shadow: 0 0 10px #ff0; pointer-events: none; animation: floatUp 1s forwards; z-index: 70; }
-        @keyframes floatUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-50px); opacity: 0; } }
-        .combo-text { position: absolute; top: 80px; left: 50%; transform: translateX(-50%); font-size: 48px; font-weight: bold; color: #ff0; text-shadow: 0 0 20px #ff0; opacity: 0; transition: opacity 0.3s; z-index: 60; }
-        .sad-logo { position: absolute; top: 15px; right: 15px; font-size: 14px; color: #0ff; text-shadow: 0 0 10px #0ff; z-index: 50; opacity: 0.8; }
-        .spotify-btn { position: absolute; bottom: 80px; right: 20px; background: #1DB954; color: white; padding: 15px; border-radius: 50%; font-weight: bold; box-shadow: 0 0 20px #1DB954; cursor: pointer; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .score-box { background: rgba(0,0,0,0.7); padding: 12px 22px; border-radius: 12px; border: 2px solid #0ff; font-size: 20px; font-weight: bold; min-width: 140px; text-align: center; box-shadow: 0 0 20px #0ff; }
+        .score-zone { position: absolute; bottom: 0; height: 70px; width: 100%; display: flex; border-top: 4px solid #0ff; }
+        .score-zone div { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: bold; background: rgba(0,0,0,0.8); border-left: 1px solid #0ff; border-right: 1px solid #0ff; text-shadow: 0 0 12px #fff; }
+        .level-up { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 90px; font-weight: bold; color: gold; text-shadow: 0 0 40px yellow, 0 0 80px orange; opacity: 0; pointer-events: none; z-index: 90; }
+        .score-popup { position: absolute; font-weight: bold; font-size: 28px; color: gold; text-shadow: 0 0 15px #ff0; pointer-events: none; animation: floatUp 1.2s forwards; z-index: 70; }
+        @keyframes floatUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-60px); opacity: 0; } }
+        .combo-text { position: absolute; top: 90px; left: 50%; transform: translateX(-50%); font-size: 56px; font-weight: bold; color: #ff0; text-shadow: 0 0 25px #ff0; opacity: 0; transition: opacity 0.3s; z-index: 60; }
+        .sad-logo { position: absolute; top: 15px; right: 15px; font-size: 16px; color: #0ff; text-shadow: 0 0 15px #0ff; z-index: 50; opacity: 0.9; }
+        .track-info { position: absolute; bottom: 90px; left: 20px; font-size: 16px; color: #0ff; text-shadow: 0 0 10px #0ff; z-index: 50; }
     </style>
 </head>
 <body>
@@ -33,13 +30,14 @@
     <canvas id="plinkoCanvas"></canvas>
 
     <!-- S.A.D. LOGO -->
-    <div class="sad-logo">S.A.D. ARCADE DIVISION<br>by Dr.Sujelu</div>
+    <div class="sad-logo">S.A.D. INFINITE ARCADE<br>by Dr.Sujelu</div>
 
     <!-- TITLE SCREEN -->
     <div class="overlay" id="startOverlay">
-        <h1>ROBOPLINKO XTREME</h1>
-        <button id="startButton">START GAME</button>
-        <div style="margin-top: 20px; color: #0ff; font-size: 18px;">
+        <h1>ROBOPLINKO</h1>
+        <h2 style="font-size: 32px; color: #0ff; margin-bottom: 20px;">INFINITE</h2>
+        <button id="startButton">INIZIA</button>
+        <div style="margin-top: 30px; color: #0ff; font-size: 20px;">
             HI-SCORE: <span id="hiScoreDisplay">000000</span>
         </div>
     </div>
@@ -47,18 +45,18 @@
     <!-- GAME OVER -->
     <div class="overlay" id="gameOverOverlay" style="display: none;">
         <h1>GAME OVER</h1>
-        <div style="margin: 20px 0; font-size: 32px; color: gold;">
-            SCORE: <span id="finalScore">0</span>
+        <div style="margin: 20px 0; font-size: 36px; color: gold;">
+            SCORE FINALE: <span id="finalScore">0</span>
         </div>
-        <button id="restartButton">VENDETTA</button>
+        <button id="restartButton">RIVINCITA</button>
     </div>
 
     <!-- HUD -->
     <div id="info">
-        <div class="score-box">Palline: <span id="remainingBalls">30</span></div>
         <div class="score-box">Score: <span id="score">0</span></div>
         <div class="score-box">Picco: <span id="highScore">0</span></div>
         <div class="score-box">Livello: <span id="level">1</span></div>
+        <div class="score-box">Combo: <span id="combo">0</span></div>
     </div>
 
     <!-- SCORE ZONES -->
@@ -74,20 +72,27 @@
     <!-- COMBO -->
     <div class="combo-text" id="comboText"></div>
 
-    <!-- STREAM BUTTON -->
-    <button class="spotify-btn" onclick="streamToUnlock()">
-        STREAM = +5
-    </button>
+    <!-- TRACK INFO -->
+    <div class="track-info" id="trackInfo">Livello 1 – Intro</div>
 
-    <!-- AUDIO CUSTOM (tuoi file WeTransfer) -->
-    <audio id="dropSound" src="https://wetransfer.com/downloads/b6c18492661651e3203b58f8f0bd009420251102183141/95cf0f/drop.wav" preload="auto"></audio>
-    <audio id="bounceSound" src="https://wetransfer.com/downloads/b6c18492661651e3203b58f8f0bd009420251102183141/95cf0f/bounce.wav" preload="auto"></audio>
-    <audio id="bonusClickSound" src="https://wetransfer.com/downloads/b6c18492661651e3203b58f8f0bd009420251102183141/95cf0f/bonus_click.wav" preload="auto"></audio>
-    <audio id="bonusCompleteSound" src="https://wetransfer.com/downloads/b6c18492661651e3203b58f8f0bd009420251102183141/95cf0f/bonus_complete.wav" preload="auto"></audio>
-    <audio id="powerupSpawnSound" src="https://wetransfer.com/downloads/b6c18492661651e3203b58f8f0bd009420251102183141/95cf0f/powerup_spawn.wav" preload="auto"></audio>
-    <audio id="powerupCollectSound" src="https://wetransfer.com/downloads/b6c18492661651e3203b58f8f0bd009420251102183141/95cf0f/powerup_collect.wav" preload="auto"></audio>
-    <audio id="explosionSound" src="https://wetransfer.com/downloads/b6c18492661651e3203b58f8f0bd009420251102183141/95cf0f/explosion.wav" preload="auto"></audio>
-    <audio id="levelUpSound" src="https://wetransfer.com/downloads/b6c18492661651e3203b58f8f0bd009420251102183141/95cf0f/level_up.wav" preload="auto"></audio>
+    <!-- AUDIO – RINOMINATI SEMPLICI -->
+    <audio id="dropSound" src="audio/drop.wav" preload="auto"></audio>
+    <audio id="bounceSound" src="audio/bounce01.wav" preload="auto"></audio>
+    <audio id="bonusClickSound" src="audio/bonus_click.wav" preload="auto"></audio>
+    <audio id="bonusCompleteSound" src="audio/bonus_complete.wav" preload="auto"></audio>
+    <audio id="powerupSpawnSound" src="audio/powerup_spawn.wav" preload="auto"></audio>
+    <audio id="powerupCollectSound" src="audio/powerup_collect.wav" preload="auto"></audio>
+    <audio id="explosionSound" src="audio/explosion.wav" preload="auto"></audio>
+
+    <!-- SOUNDTRACK PER LIVELLO -->
+    <audio id="track1" src="audio/level1_intro.mp3" preload="auto"></audio>
+    <audio id="track2" src="audio/Dr.Sujelu_The Golden Element.mp3" preload="auto"></audio>
+    <audio id="track3" src="audio/Fire Fish.wav" preload="auto"></audio>
+    <audio id="track4" src="audio/Game Over.mp3" preload="auto"></audio>
+    <audio id="track5" src="audio/Rock n Roll.mp3" preload="auto"></audio>
+    <audio id="track6" src="audio/reDiesisChiodino02.wav" preload="auto"></audio>
+    <audio id="track7" src="audio/level_up.mp3" preload="auto"></audio>
+    <audio id="track8" src="audio/Brain Massage - S.A.D. Corp.mp3" preload="auto"></audio>
 
     <script>
         // === ELEMENTI ===
@@ -97,14 +102,15 @@
         const startButton = document.getElementById('startButton');
         const gameOverOverlay = document.getElementById('gameOverOverlay');
         const restartButton = document.getElementById('restartButton');
-        const remainingBallsDisplay = document.getElementById('remainingBalls');
         const scoreDisplay = document.getElementById('score');
         const highScoreDisplay = document.getElementById('highScore');
         const hiScoreDisplay = document.getElementById('hiScoreDisplay');
         const levelDisplay = document.getElementById('level');
+        const comboDisplay = document.getElementById('combo');
         const levelUpMessage = document.getElementById('levelUpMessage');
         const comboText = document.getElementById('comboText');
         const finalScoreDisplay = document.getElementById('finalScore');
+        const trackInfo = document.getElementById('trackInfo');
 
         // === AUDIO ===
         const dropSound = document.getElementById('dropSound');
@@ -114,7 +120,19 @@
         const powerupSpawnSound = document.getElementById('powerupSpawnSound');
         const powerupCollectSound = document.getElementById('powerupCollectSound');
         const explosionSound = document.getElementById('explosionSound');
-        const levelUpSound = document.getElementById('levelUpSound');
+
+        const tracks = [
+            null, // livello 0
+            document.getElementById('track1'),
+            document.getElementById('track2'),
+            document.getElementById('track3'),
+            document.getElementById('track4'),
+            document.getElementById('track5'),
+            document.getElementById('track6'),
+            document.getElementById('track7'),
+            document.getElementById('track8')
+        ];
+        let currentTrack = null;
 
         // === PENTATONIC BOUNCE ===
         const bounceNotes = [0, 3, 5, 7, 10];
@@ -123,23 +141,27 @@
         // === COSTANTI ===
         const CHIODINO_RADIUS = 5, PALLINA_RADIUS = 5;
         let GRAVITY_Y = 0.5;
-        const ZONE_HEIGHT = 60;
+        const ZONE_HEIGHT = 70;
         const SCORE_ZONES = [-500, 10, 20, 150, -1000, 5000, -1000, 150, 40, 75, -500];
         const LEVEL_THEMES = [
             { bg: "#111", peg: "#888", ball: "orange", glow: "#555" },
             { bg: "#0a0a23", peg: "#00ff41", ball: "#00ffff", glow: "#0f0" },
             { bg: "#230023", peg: "#ff00ff", ball: "#ff4400", glow: "#f0f" },
-            { bg: "#330000", peg: "#ffff00", ball: "white", glow: "#ff0" }
+            { bg: "#330000", peg: "#ffff00", ball: "white", glow: "#ff0" },
+            { bg: "#001133", peg: "#00ffff", ball: "#00ff00", glow: "#0ff" },
+            { bg: "#330011", peg: "#ff00ff", ball: "#ffff00", glow: "#f0f" },
+            { bg: "#113300", peg: "#00ff00", ball: "#ff00ff", glow: "#0f0" },
+            { bg: "#000000", peg: "#ffffff", ball: "#00ffff", glow: "#fff" }
         ];
 
         // === VARIABILI ===
         let CHIODINI = [], PALLINE = [], BONUS = [], POWERUPS_ACTIVE = [], particles = [];
-        let score = 0, highScore = 0, remainingBalls = 30, gameOver = false;
-        let currentLevel = 0, levelThreshold = 5000;
-        let bonusClickCount = 0, combo = 0, comboMultiplier = 1;
+        let score = 0, highScore = 0, gameOver = false;
+        let currentLevel = 1, levelThreshold = 10000;
+        let combo = 0, comboMultiplier = 1;
         let shakeIntensity = 0;
 
-        highScore = parseInt(localStorage.getItem('sadPlinkoHiScore') || '0');
+        highScore = parseInt(localStorage.getItem('sadInfiniteHiScore') || '0');
         highScoreDisplay.innerText = highScore.toString().padStart(6, '0');
         hiScoreDisplay.innerText = highScore.toString().padStart(6, '0');
 
@@ -155,24 +177,22 @@
         // === GENERA CHIODINI ===
         function generateChiodini() {
             CHIODINI = [];
-            const rows = 18, cols = 22;
+            const rows = 20, cols = 24;
             const spacingX = canvas.width / cols;
-            const spacingY = (canvas.height - ZONE_HEIGHT - 100) / rows;
+            const spacingY = (canvas.height - ZONE_HEIGHT - 120) / rows;
             for (let y = 0; y < rows; y++) {
                 for (let x = 0; x < cols; x++) {
                     const offsetX = (y % 2 === 0) ? spacingX / 2 : 0;
-                    CHIODINI.push({ x: x * spacingX + offsetX, y: y * spacingY + 80, glow: Math.random() * 0.7 + 0.3 });
+                    CHIODINI.push({ x: x * spacingX + offsetX, y: y * spacingY + 100, glow: Math.random() * 0.7 + 0.3 });
                 }
             }
         }
 
         // === CREA PALLINA ===
         function createPallina(x) {
-            if (remainingBalls <= 0 && !gameOver) return;
-            PALLINE.push({ x, y: 10, speedX: (Math.random() - 0.5) * 1, speedY: 0, landed: false, color: LEVEL_THEMES[currentLevel].ball });
-            if (!gameOver) remainingBalls--;
-            remainingBallsDisplay.innerText = remainingBalls;
+            PALLINE.push({ x, y: 10, speedX: (Math.random() - 0.5) * 1.2, speedY: 0, landed: false, color: LEVEL_THEMES[(currentLevel-1) % LEVEL_THEMES.length].ball });
             combo++;
+            comboDisplay.innerText = combo;
             showCombo();
             dropSound.currentTime = 0;
             dropSound.play().catch(() => {});
@@ -184,6 +204,19 @@
             bounceSound.playbackRate = Math.pow(2, bounceNotes[currentNote % 5] / 12);
             bounceSound.play().catch(() => {});
             currentNote++;
+        }
+
+        // === CAMBIO TRACCIA ===
+        function playTrack(level) {
+            if (currentTrack) currentTrack.pause();
+            const track = tracks[level];
+            if (track) {
+                track.currentTime = 0;
+                track.loop = true;
+                track.play().catch(() => {});
+                currentTrack = track;
+                trackInfo.innerText = `Livello ${level} – ${track.src.split('/').pop().replace('.mp3','').replace('.wav','')}`;
+            }
         }
 
         // === UPDATE PALLINE ===
@@ -200,8 +233,8 @@
                     const dist = Math.hypot(c.x - p.x, c.y - p.y);
                     if (dist < CHIODINO_RADIUS + PALLINA_RADIUS) {
                         p.speedY *= -0.8;
-                        p.speedX += (Math.random() - 0.5) * 1.5;
-                        createParticles(p.x, p.y, 3, '#fff');
+                        p.speedX += (Math.random() - 0.5) * 1.8;
+                        createParticles(p.x, p.y, 4, '#fff');
                         playBounce();
                     }
                 });
@@ -211,10 +244,11 @@
                     const zoneWidth = canvas.width / SCORE_ZONES.length;
                     const zoneIndex = Math.floor(p.x / zoneWidth);
                     let points = SCORE_ZONES[zoneIndex] || 0;
-                    const total = points * combo * comboMultiplier;
+                    const total = Math.max(0, points * combo * comboMultiplier);
                     score += total;
                     showScorePopup(p.x, p.y, total > 0 ? `+${total}` : total);
                     combo = 0;
+                    comboDisplay.innerText = '0';
                     hideCombo();
                 }
                 return p.y < canvas.height + 50;
@@ -225,20 +259,20 @@
         function createBonus() {
             const types = ['circle', 'square', 'triangle'];
             const type = types[Math.floor(Math.random() * types.length)];
-            const size = type === 'circle' ? 20 : (type === 'square' ? 30 : 25);
-            BONUS.push({ x: Math.random() * (canvas.width - size), y: Math.random() * (canvas.height - ZONE_HEIGHT - size), type, size, clicked: 0, speedX: (Math.random() - 0.5) * 2, speedY: (Math.random() - 0.5) * 2 });
+            const size = type === 'circle' ? 22 : (type === 'square' ? 32 : 27);
+            BONUS.push({ x: Math.random() * (canvas.width - size), y: Math.random() * (canvas.height - ZONE_HEIGHT - size), type, size, clicked: 0, speedX: (Math.random() - 0.5) * 2.5, speedY: (Math.random() - 0.5) * 2.5 });
         }
 
         function createPowerUp() {
             const types = ['DOUBLE', 'SLOW', 'MULTI'];
             const type = types[Math.floor(Math.random() * types.length)];
             const color = type === 'DOUBLE' ? 'gold' : (type === 'SLOW' ? '#00f' : '#0f0');
-            POWERUPS_ACTIVE.push({ x: Math.random() * canvas.width, y: 0, type, color, vy: 2 });
+            POWERUPS_ACTIVE.push({ x: Math.random() * canvas.width, y: 0, type, color, vy: 2.5 });
         }
 
-        function createParticles(x, y, count = 15, color = 'yellow') {
+        function createParticles(x, y, count = 20, color = 'yellow') {
             for (let i = 0; i < count; i++) {
-                particles.push({ x, y, vx: (Math.random() - 0.5) * 12, vy: (Math.random() - 0.5) * 12, life: 1, color });
+                particles.push({ x, y, vx: (Math.random() - 0.5) * 15, vy: (Math.random() - 0.5) * 15, life: 1, color });
             }
         }
 
@@ -260,20 +294,20 @@
 
         function updateParticles() {
             particles = particles.filter(p => {
-                p.x += p.vx; p.y += p.vy; p.vx *= 0.98; p.vy *= 0.98; p.life -= 0.02;
+                p.x += p.vx; p.y += p.vy; p.vx *= 0.97; p.vy *= 0.97; p.life -= 0.018;
                 return p.life > 0;
             });
         }
 
         // === DRAW ===
         function drawChiodini() {
-            const theme = LEVEL_THEMES[currentLevel];
+            const theme = LEVEL_THEMES[(currentLevel-1) % LEVEL_THEMES.length];
             CHIODINI.forEach(c => {
                 ctx.beginPath();
                 ctx.arc(c.x, c.y, CHIODINO_RADIUS, 0, Math.PI*2);
                 ctx.fillStyle = theme.peg;
                 ctx.shadowColor = theme.glow;
-                ctx.shadowBlur = c.glow * 25;
+                ctx.shadowBlur = c.glow * 30;
                 ctx.fill();
                 ctx.shadowBlur = 0;
                 ctx.strokeStyle = '#333';
@@ -288,6 +322,7 @@
                 ctx.fillStyle = p.color;
                 ctx.fill();
                 ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 1.5;
                 ctx.stroke();
             });
         }
@@ -296,7 +331,7 @@
             particles.forEach(p => {
                 ctx.globalAlpha = p.life;
                 ctx.fillStyle = p.color;
-                ctx.fillRect(p.x - 2, p.y - 2, 4, 4);
+                ctx.fillRect(p.x - 2.5, p.y - 2.5, 5, 5);
             });
             ctx.globalAlpha = 1;
         }
@@ -309,23 +344,23 @@
             el.style.left = x + 'px';
             el.style.top = (y - 20) + 'px';
             document.body.appendChild(el);
-            setTimeout(() => el.remove(), 1000);
+            setTimeout(() => el.remove(), 1200);
         }
 
         function showLevelUp() {
             levelUpMessage.style.opacity = 1;
-            setTimeout(() => levelUpMessage.style.opacity = 0, 1500);
+            setTimeout(() => levelUpMessage.style.opacity = 0, 1800);
         }
 
         function showCombo() {
-            if (combo > 1) {
+            if (combo > 2) {
                 comboText.innerText = `COMBO x${combo}`;
                 comboText.style.opacity = 1;
             }
         }
 
         function hideCombo() {
-            setTimeout(() => { if (combo <= 1) comboText.style.opacity = 0; }, 500);
+            setTimeout(() => { if (combo <= 2) comboText.style.opacity = 0; }, 600);
         }
 
         function applyShake() {
@@ -333,7 +368,7 @@
                 const dx = (Math.random() - 0.5) * shakeIntensity;
                 const dy = (Math.random() - 0.5) * shakeIntensity;
                 ctx.translate(dx, dy);
-                shakeIntensity *= 0.88;
+                shakeIntensity *= 0.85;
             }
         }
 
@@ -344,20 +379,22 @@
                 highScore = displayScore;
                 highScoreDisplay.innerText = highScore.toString().padStart(6, '0');
                 hiScoreDisplay.innerText = highScore.toString().padStart(6, '0');
-                localStorage.setItem('sadPlinkoHiScore', highScore);
+                localStorage.setItem('sadInfiniteHiScore', highScore);
             }
         }
 
         function checkGameOver() {
-            if (remainingBalls <= 0 && PALLINE.every(p => p.landed)) {
+            if (PALLINE.length > 200) { // overload = game over
                 gameOver = true;
                 finalScoreDisplay.innerText = Math.floor(score * comboMultiplier);
                 gameOverOverlay.style.display = 'flex';
+                if (currentTrack) currentTrack.pause();
             }
         }
 
         // === CLICK HANDLER ===
         canvas.addEventListener('click', e => {
+            if (gameOver) return;
             const rect = canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
@@ -366,11 +403,11 @@
             for (let i = POWERUPS_ACTIVE.length - 1; i >= 0; i--) {
                 const pu = POWERUPS_ACTIVE[i];
                 const dist = Math.hypot(pu.x - x, pu.y - y);
-                if (dist < 25) {
+                if (dist < 30) {
                     powerupCollectSound.currentTime = 0;
                     powerupCollectSound.play().catch(() => {});
                     activatePowerUp(pu.type);
-                    createParticles(x, y, 25, pu.color);
+                    createParticles(x, y, 30, pu.color);
                     POWERUPS_ACTIVE.splice(i, 1);
                     break;
                 }
@@ -387,6 +424,7 @@
                         BONUS.splice(i, 1);
                         bonusCompleteSound.currentTime = 0;
                         bonusCompleteSound.play().catch(() => {});
+                        remainingBalls += 3;
                     }
                     break;
                 }
@@ -396,22 +434,9 @@
         });
 
         function activatePowerUp(type) {
-            if (type === 'DOUBLE') { comboMultiplier = 2; setTimeout(() => comboMultiplier = 1, 10000); }
-            else if (type === 'SLOW') { GRAVITY_Y = 0.25; setTimeout(() => GRAVITY_Y = 0.5, 8000); }
-            else if (type === 'MULTI') { remainingBalls += 5; remainingBallsDisplay.innerText = remainingBalls; }
-        }
-
-        // === STREAM TO UNLOCK – “BRAIN MASSAGE” ORIGINALE ===
-        function streamToUnlock() {
-            const brainMassageTrack = "https://open.spotify.com/track/2a3bXyRz3iUi6dTZCvPO59";
-            window.open(brainMassageTrack, '_blank');
-            
-            setTimeout(() => {
-                remainingBalls += 5;
-                remainingBallsDisplay.innerText = remainingBalls;
-                showScorePopup(canvas.width/2, 100, '+5 BALLS (Brain Massage!)');
-                createParticles(canvas.width/2, 100, 30, '#1DB954');
-            }, 30000);
+            if (type === 'DOUBLE') { comboMultiplier = 2; setTimeout(() => comboMultiplier = 1, 12000); }
+            else if (type === 'SLOW') { GRAVITY_Y = 0.2; setTimeout(() => GRAVITY_Y = 0.5, 10000); }
+            else if (type === 'MULTI') { for (let i = 0; i < 5; i++) setTimeout(() => createPallina(canvas.width/2 + (Math.random()-0.5)*100), i*100); }
         }
 
         // === GAME LOOP ===
@@ -421,19 +446,19 @@
             ctx.save();
             applyShake();
 
-            ctx.fillStyle = LEVEL_THEMES[currentLevel].bg;
+            const theme = LEVEL_THEMES[(currentLevel-1) % LEVEL_THEMES.length];
+            ctx.fillStyle = theme.bg;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             if (score >= levelThreshold) {
-                currentLevel = Math.min(currentLevel + 1, LEVEL_THEMES.length - 1);
-                levelThreshold += 8000;
-                levelDisplay.innerText = currentLevel + 1;
+                currentLevel++;
+                levelThreshold += 10000 + (currentLevel * 2000);
+                levelDisplay.innerText = currentLevel;
                 showLevelUp();
-                createParticles(canvas.width/2, 100, 60, 'gold');
-                shakeIntensity = 15;
+                createParticles(canvas.width/2, 100, 80, 'gold');
+                shakeIntensity = 20;
                 createPowerUp();
-                levelUpSound.currentTime = 0;
-                levelUpSound.play().catch(() => {});
+                playTrack(Math.min(currentLevel, tracks.length - 1));
             }
 
             updatePalline();
@@ -454,22 +479,24 @@
 
         // === AVVIO ===
         function startGame() {
-            score = 0; remainingBalls = 30; gameOver = false;
-            currentLevel = 0; levelThreshold = 5000;
-            combo = 0; comboMultiplier = 1; bonusClickCount = 0;
+            score = 0; gameOver = false;
+            currentLevel = 1; levelThreshold = 10000;
+            combo = 0; comboMultiplier = 1;
             PALLINE = []; BONUS = []; POWERUPS_ACTIVE = []; particles = [];
             GRAVITY_Y = 0.5; currentNote = 0;
 
             generateChiodini();
             createBonus();
-            setInterval(createBonus, 30000);
+            setInterval(createBonus, 25000);
+            setInterval(createPowerUp, 35000);
 
             startOverlay.style.display = 'none';
             gameOverOverlay.style.display = 'none';
 
-            remainingBallsDisplay.innerText = remainingBalls;
             scoreDisplay.innerText = '000000';
             levelDisplay.innerText = '1';
+            comboDisplay.innerText = '0';
+            playTrack(1);
 
             requestAnimationFrame(update);
         }
