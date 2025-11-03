@@ -34,7 +34,7 @@ o<!DOCTYPE html>
 
     <div class="overlay" id="startOverlay">
         <h1>RoboPlink0</h1>
-        <h1> E x t r e m E !</h1>
+        <h1>! E x t r e m E !</h1>
         <h2 style="font-size: 32px; color: #0ff; margin-bottom: 20px;">Sujelu_Arcade_Division" </h2>
         <button id="startButton">Shot!</button>
         <div style="margin-top: 30px; color: #0ff; font-size: 20px;">
@@ -77,9 +77,8 @@ o<!DOCTYPE html>
     <audio id="powerupSpawnSound" src="powerup_spawn.wav" preload="auto"></audio>
     <audio id="powerupCollectSound" src="powerup_collect.wav" preload="auto"></audio>
     <audio id="explosionSound" src="explosion.wav" preload="auto"></audio>
-    <audio id="levelUpSound" src="explosion.wav" preload="auto"></audio>
     <audio id="levelUpSound" src="level_up.wav" preload="auto"></audio>
-    <audio id="bgTrack" preload="auto" loop>bg1.mp3</audio>
+    <audio id="bgTrack" preload="auto" loop></audio>
 
     <script>
         // === ELEMENTI ===
@@ -116,8 +115,8 @@ o<!DOCTYPE html>
         let currentNote = 0;
 
         // === COSTANTI ===
-        const CHIODINO_RADIUS = 4, PALLINA_RADIUS = 3;
-        let GRAVITY_Y = 0.7;
+        const CHIODINO_RADIUS = 5, PALLINA_RADIUS = 4;
+        let GRAVITY_Y = 0.5;
         const ZONE_HEIGHT = 70;
         const SCORE_ZONES = [-500, 10, 20, 0, -1000, 5000, -1000, 0, 40, 75, 0];
         const BALL_ZONES = [3, 7, 10];
@@ -191,10 +190,10 @@ o<!DOCTYPE html>
         function playBgTrack() {
             if (!audioUnlocked) return;
             const track = bgTracks[(currentLevel - 1) % bgTracks.length];
-            bgTrack.src = "/" + track;
+            bgTrack.src = "../SAD/" + track;
             bgTrack.load();
             bgTrack.loop = true;
-            bgTrack.volume = 0.6;
+            bgTrack.volume = 0.2;
             bgTrack.play().catch(() => {});
             trackInfo.innerText = `Livello ${currentLevel} – ${track.split('.')[0]}`;
         }
@@ -252,7 +251,7 @@ o<!DOCTYPE html>
         }
         function createParticles(x, y, count = 1, color = 'yellow') {
             for (let i = 0; i < count; i++) {
-                particles.push({ x, y, vx: (Math.random() - 0.5) * 6, vy: (Math.random() - 0.5) * 6, life: 0.5, color });
+                particles.push({ x, y, vx: (Math.random() - 0.7) * 6, vy: (Math.random() - 0.7) * 6, life: 0.5, color });
             }
         }
 
