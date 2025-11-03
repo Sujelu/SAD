@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.A.D. | Championship</title>
+    <title>S.A.D. | Arcade Extreme</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { height: 100%; overflow: hidden; font-family: 'Courier New', monospace; background: #000; color: #fff; }
@@ -17,6 +17,7 @@
         .score-box { background: rgba(0,0,0,0.7); padding: 12px 22px; border-radius: 12px; border: 2px solid #0ff; font-size: 20px; font-weight: bold; min-width: 140px; text-align: center; box-shadow: 0 0 20px #0ff; }
         .score-zone { position: absolute; bottom: 0; height: 70px; width: 100%; display: flex; border-top: 4px solid #0ff; }
         .score-zone div { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: bold; background: rgba(0,0,0,0.8); border-left: 1px solid #0ff; border-right: 1px solid #0ff; text-shadow: 0 0 12px #fff; }
+        .score-zone div.ball-zone { background: rgba(0,255,0,0.3); color: #0f0; text-shadow: 0 0 15px #0f0; }
         .level-up { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 90px; font-weight: bold; color: gold; text-shadow: 0 0 40px yellow, 0 0 80px orange; opacity: 0; pointer-events: none; z-index: 90; }
         .score-popup { position: absolute; font-weight: bold; font-size: 28px; color: gold; text-shadow: 0 0 15px #ff0; pointer-events: none; animation: floatUp 1.2s forwards; z-index: 70; }
         @keyframes floatUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-60px); opacity: 0; } }
@@ -29,11 +30,11 @@
 
     <canvas id="plinkoCanvas"></canvas>
 
-    <div class="sad-logo">S.A.D. CHAMPIONSHIP<br>by Dr.Sujelu</div>
+    <div class="sad-logo">S.A.D. EXTREME<br>by Dr.Sujelu</div>
 
     <div class="overlay" id="startOverlay">
-        <h1>R0b0plink0 Xtreme</h1>
-        <h2 style="font-size: 32px; color: #0ff; margin-bottom: 20px;">CHAMPIONSHIP</h2>
+        <h1>RoboPlinco</h1>
+        <h2 style="font-size: 32px; color: #0ff; margin-bottom: 20px;">Xtreme</h2>
         <button id="startButton">INIZIA</button>
         <div style="margin-top: 30px; color: #0ff; font-size: 20px;">
             HI-SCORE: <span id="hiScoreDisplay">000000</span>
@@ -49,23 +50,24 @@
     </div>
 
     <div id="info">
-        <div class="score-box">Palline: <span id="remainingBalls">30</span></div>
+        <div class="score-box">Palline: <span id="remainingBalls">50</span></div>
         <div class="score-box">Score: <span id="score">0</span></div>
         <div class="score-box">Picco: <span id="highScore">0</span></div>
         <div class="score-box">Livello: <span id="level">1</span></div>
     </div>
 
-    <div class="score-zone">
-        <div>-500</div><div>+10</div><div>+20</div><div>150</div>
-        <div>-1000</div><div>5000</div><div>-1000</div><div>150</div>
-        <div>40</div><div>75</div><div>-500</div>
+    <!-- ZONA PUNTEGGIO CON +PALLINE -->
+    <div class="score-zone" id="scoreZone">
+        <div>-500</div><div>+10</div><div>+20</div><div class="ball-zone">+1 BALL</div>
+        <div>-1000</div><div>5000</div><div>-1000</div><div class="ball-zone">+1 BALL</div>
+        <div>40</div><div>75</div><div class="ball-zone">+1 BALL</div>
     </div>
 
     <div class="level-up" id="levelUpMessage">LEVEL UP!</div>
     <div class="combo-text" id="comboText"></div>
     <div class="track-info" id="trackInfo">Livello 1 – Intro</div>
 
-    <!-- AUDIO – NOMI SEMPLICI -->
+    <!-- AUDIO -->
     <audio id="dropSound" src="audio/drop.mp3" preload="auto"></audio>
     <audio id="bounceSound" src="audio/bounce.mp3" preload="auto"></audio>
     <audio id="bonusClickSound" src="audio/bonus_click.mp3" preload="auto"></audio>
@@ -106,7 +108,7 @@
 
         let audioUnlocked = false;
 
-        // BOUNCE PENTATONICO
+        // BOUNCE
         const bounceNotes = [0, 3, 5, 7, 10];
         let currentNote = 0;
 
@@ -114,7 +116,8 @@
         const CHIODINO_RADIUS = 5, PALLINA_RADIUS = 5;
         let GRAVITY_Y = 0.5;
         const ZONE_HEIGHT = 70;
-        const SCORE_ZONES = [-500, 10, 20, 150, -1000, 5000, -1000, 150, 40, 75, -500];
+        const SCORE_ZONES = [-500, 10, 20, 0, -1000, 5000, -1000, 0, 40, 75, 0]; // 0 = +1 BALL
+        const BALL_ZONES = [3, 7, 10]; // indici con +1 BALL
         const LEVEL_THEMES = [
             { bg: "#111", peg: "#888", ball: "orange", glow: "#555" },
             { bg: "#0a0a23", peg: "#00ff41", ball: "#00ffff", glow: "#0f0" },
@@ -124,12 +127,12 @@
 
         // VARIABILI
         let CHIODINI = [], PALLINE = [], BONUS = [], POWERUPS_ACTIVE = [], particles = [];
-        let score = 0, highScore = 0, remainingBalls = 30, gameOver = false;
+        let score = 0, highScore = 0, remainingBalls = 50, gameOver = false;
         let currentLevel = 1, levelThreshold = 8000;
         let combo = 0, comboMultiplier = 1;
         let shakeIntensity = 0;
 
-        highScore = parseInt(localStorage.getItem('sadChampHiScore') || '0');
+        highScore = parseInt(localStorage.getItem('sadExtremeHiScore') || '0');
         highScoreDisplay.innerText = highScore.toString().padStart(6, '0');
         hiScoreDisplay.innerText = highScore.toString().padStart(6, '0');
 
@@ -164,7 +167,7 @@
             remainingBallsDisplay.innerText = remainingBalls;
             combo++;
             showCombo();
-            if (audioUnlocked) dropSound.play();
+            if (audioUnlocked) dropSound.play().catch(() => console.log("Drop sound error"));
         }
 
         // RIMBALZO
@@ -172,7 +175,7 @@
             if (!audioUnlocked) return;
             bounceSound.currentTime = 0;
             bounceSound.playbackRate = Math.pow(2, bounceNotes[currentNote % 5] / 12);
-            bounceSound.play();
+            bounceSound.play().catch(() => console.log("Bounce sound error"));
             currentNote++;
         }
 
@@ -185,7 +188,7 @@
             bgTrack.load();
             bgTrack.loop = true;
             bgTrack.volume = 0.5;
-            bgTrack.play();
+            bgTrack.play().catch(() => console.log("BG track error"));
             trackInfo.innerText = `Livello ${currentLevel} – ${track}`;
         }
 
@@ -212,10 +215,17 @@
                 if (p.y >= canvas.height - ZONE_HEIGHT) {
                     p.landed = true;
                     const zoneIndex = Math.floor(p.x / (canvas.width / SCORE_ZONES.length));
-                    let points = SCORE_ZONES[zoneIndex] || 0;
-                    const total = points * combo * comboMultiplier;
-                    score += total;
-                    showScorePopup(p.x, p.y, total > 0 ? `+${total}` : total);
+                    let points = SCORE_ZONES[zoneIndex];
+                    if (BALL_ZONES.includes(zoneIndex)) {
+                        remainingBalls = Math.min(remainingBalls + 1, 50);
+                        remainingBallsDisplay.innerText = remainingBalls;
+                        showScorePopup(p.x, p.y, "+1 BALL!");
+                        if (audioUnlocked) bonusCompleteSound.play().catch(() => {});
+                    } else {
+                        const total = points * combo * comboMultiplier;
+                        score += total;
+                        showScorePopup(p.x, p.y, total > 0 ? `+${total}` : total);
+                    }
                     combo = 0;
                     hideCombo();
                 }
@@ -223,8 +233,15 @@
             });
         }
 
-        // GAME LOOP + RESTO IDENTICO (bonus, powerup, draw, ecc.)
-        // ... [codice completo come v4.0, ma con audioUnlocked]
+        // BONUS & POWERUP (come prima, ma +3 palline)
+        function activatePowerUp(type) {
+            if (type === 'DOUBLE') { comboMultiplier = 2; setTimeout(() => comboMultiplier = 1, 10000); }
+            else if (type === 'SLOW') { GRAVITY_Y = 0.25; setTimeout(() => GRAVITY_Y = 0.5, 8000); }
+            else if (type === 'MULTI') { 
+                remainingBalls = Math.min(remainingBalls + 3, 50); 
+                remainingBallsDisplay.innerText = remainingBalls; 
+            }
+        }
 
         // AVVIO
         startButton.addEventListener('click', () => {
@@ -233,6 +250,8 @@
             startGame();
         });
         restartButton.addEventListener('click', startGame);
+
+        // ... (resto del codice come v5.0)
     </script>
 </body>
 </html>
