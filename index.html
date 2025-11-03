@@ -3,29 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.A.D. | RoboPlinko Xtreme</title>
+    <title>S.A.D. | RoboPlinko Classic</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { height: 100%; overflow: hidden; font-family: 'Courier New', monospace; background: #000; color: #fff; }
         canvas { display: block; background: #111; }
-        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; }
-        .overlay h1 { font-size: 60px; margin-bottom: 20px; text-shadow: 0 0 20px #0ff, 0 0 40px #0ff; animation: glitch 2s infinite; }
-        @keyframes glitch { 0%,100% { text-shadow: 0 0 20px #0ff, 0 0 40px #0ff; } 50% { text-shadow: 0 0 30px #f0f, 0 0 60px #f0f; } }
-        button { padding: 15px 30px; font-size: 24px; font-weight: bold; color: #000; background: linear-gradient(45deg, #0ff, #0f0); border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 20px #0ff; }
-        button:hover { transform: scale(1.1); box-shadow: 0 0 40px #0ff; }
+        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; }
+        .overlay h1 { font-size: 70px; margin-bottom: 20px; text-shadow: 0 0 30px #0ff, 0 0 60px #0ff; animation: glitch 1.5s infinite; }
+        @keyframes glitch { 0%,100% { text-shadow: 0 0 30px #0ff, 0 0 60px #0ff; } 50% { text-shadow: 0 0 40px #f0f, 0 0 80px #f0f; } }
+        button { padding: 18px 40px; font-size: 28px; font-weight: bold; color: #000; background: linear-gradient(45deg, #0ff, #0f0); border: none; border-radius: 15px; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 30px #0ff; }
+        button:hover { transform: scale(1.15); box-shadow: 0 0 50px #0ff; }
         #info { position: absolute; top: 15px; left: 15px; display: flex; gap: 15px; z-index: 50; }
-        .score-box { background: rgba(0,0,0,0.7); padding: 10px 20px; border-radius: 10px; border: 2px solid #0ff; font-size: 18px; font-weight: bold; min-width: 120px; text-align: center; box-shadow: 0 0 15px #0ff; }
-        .score-zone { position: absolute; bottom: 0; height: 60px; width: 100%; display: flex; border-top: 3px solid #0ff; }
-        .score-zone div { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; background: rgba(0,0,0,0.8); border-left: 1px solid #0ff; border-right: 1px solid #0ff; text-shadow: 0 0 10px #fff; }
-        .level-up { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 80px; font-weight: bold; color: gold; text-shadow: 0 0 30px yellow, 0 0 60px orange; opacity: 0; pointer-events: none; z-index: 90; }
-        .explosion { position: absolute; width: 100px; height: 100px; background: radial-gradient(circle, yellow, orange, red); border-radius: 50%; pointer-events: none; animation: explode 0.6s forwards; z-index: 80; }
-        @keyframes explode { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(4); opacity: 0; } }
-        .score-popup { position: absolute; font-weight: bold; font-size: 24px; color: gold; text-shadow: 0 0 10px #ff0; pointer-events: none; animation: floatUp 1s forwards; z-index: 70; }
-        @keyframes floatUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-50px); opacity: 0; } }
-        .combo-text { position: absolute; top: 80px; left: 50%; transform: translateX(-50%); font-size: 48px; font-weight: bold; color: #ff0; text-shadow: 0 0 20px #ff0; opacity: 0; transition: opacity 0.3s; z-index: 60; }
-        .sad-logo { position: absolute; top: 15px; right: 15px; font-size: 14px; color: #0ff; text-shadow: 0 0 10px #0ff; z-index: 50; opacity: 0.8; }
-        .spotify-btn { position: absolute; bottom: 80px; right: 20px; background: #1DB954; color: white; padding: 15px; border-radius: 50%; font-weight: bold; box-shadow: 0 0 20px #1DB954; cursor: pointer; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .score-box { background: rgba(0,0,0,0.7); padding: 12px 22px; border-radius: 12px; border: 2px solid #0ff; font-size: 20px; font-weight: bold; min-width: 140px; text-align: center; box-shadow: 0 0 20px #0ff; }
+        .score-zone { position: absolute; bottom: 0; height: 70px; width: 100%; display: flex; border-top: 4px solid #0ff; }
+        .score-zone div { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: bold; background: rgba(0,0,0,0.8); border-left: 1px solid #0ff; border-right: 1px solid #0ff; text-shadow: 0 0 12px #fff; }
+        .level-up { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 90px; font-weight: bold; color: gold; text-shadow: 0 0 40px yellow, 0 0 80px orange; opacity: 0; pointer-events: none; z-index: 90; }
+        .score-popup { position: absolute; font-weight: bold; font-size: 28px; color: gold; text-shadow: 0 0 15px #ff0; pointer-events: none; animation: floatUp 1.2s forwards; z-index: 70; }
+        @keyframes floatUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-60px); opacity: 0; } }
+        .combo-text { position: absolute; top: 90px; left: 50%; transform: translateX(-50%); font-size: 56px; font-weight: bold; color: #ff0; text-shadow: 0 0 25px #ff0; opacity: 0; transition: opacity 0.3s; z-index: 60; }
+        .sad-logo { position: absolute; top: 15px; right: 15px; font-size: 16px; color: #0ff; text-shadow: 0 0 15px #0ff; z-index: 50; opacity: 0.9; }
+        .track-info { position: absolute; bottom: 90px; left: 20px; font-size: 16px; color: #0ff; text-shadow: 0 0 10px #0ff; z-index: 50; }
     </style>
 </head>
 <body>
@@ -33,13 +30,14 @@
     <canvas id="plinkoCanvas"></canvas>
 
     <!-- S.A.D. LOGO -->
-    <div class="sad-logo">S.A.D. ARCADE DIVISION<br>by Dr.Sujelu</div>
+    <div class="sad-logo">S.A.D. ARCADE CLASSIC<br>by Dr.Sujelu</div>
 
     <!-- TITLE SCREEN -->
     <div class="overlay" id="startOverlay">
-        <h1>ROBOPLINKO XTREME 17</h1>
-        <button id="startButton">START GAME</button>
-        <div style="margin-top: 20px; color: #0ff; font-size: 18px;">
+        <h1>ROBOPLINKO</h1>
+        <h2 style="font-size: 32px; color: #0ff; margin-bottom: 20px;">CLASSIC</h2>
+        <button id="startButton">INIZIA</button>
+        <div style="margin-top: 30px; color: #0ff; font-size: 20px;">
             HI-SCORE: <span id="hiScoreDisplay">000000</span>
         </div>
     </div>
@@ -47,10 +45,10 @@
     <!-- GAME OVER -->
     <div class="overlay" id="gameOverOverlay" style="display: none;">
         <h1>GAME OVER</h1>
-        <div style="margin: 20px 0; font-size: 32px; color: gold;">
-            SCORE: <span id="finalScore">0</span>
+        <div style="margin: 20px 0; font-size: 36px; color: gold;">
+            SCORE FINALE: <span id="finalScore">0</span>
         </div>
-        <button id="restartButton">VENDETTA</button>
+        <button id="restartButton">RIVINCITA</button>
     </div>
 
     <!-- HUD -->
@@ -74,255 +72,12 @@
     <!-- COMBO -->
     <div class="combo-text" id="comboText"></div>
 
-    <!-- STREAM BUTTON -->
-    <button class="spotify-btn" onclick="streamToUnlock()">STREAM = +5</button>
+    <!-- TRACK INFO -->
+    <div class="track-info" id="trackInfo">Livello 1 – Intro</div>
 
-    <!-- AUDIO MP3 - I TUOI FILE REALI -->
+    <!-- AUDIO – I TUOI FILE REALI (MP3/WAV) -->
     <audio id="dropSound" src="audio/Tap Screen Lancia pallina.wav" preload="auto"></audio>
     <audio id="bounceSound" src="audio/solDiesChiodo01.wav" preload="auto"></audio>
-    <audio id="bonusClickSound" src="audio/bonus_click.wav" preload="auto"></audio>
-    <audio id="bonusCompleteSound" src="audio/ballance.wav" preload="auto"></audio>
-    <audio id="powerupSpawnSound" src="audio/powerup_spawn.wav" preload="auto"></audio>
-    <audio id="powerupCollectSound" src="audio/powerup_collect.wav" preload="auto"></audio>
-    <audio id="explosionSound" src="audio/esplosione multiball.wav" preload="auto"></audio>
-    <audio id="levelUpSound" src="audio/Brain Massage - S.A.D. Corp.mp3" preload="auto"></audio>
-
-    <script>
-        // === ELEMENTI ===
-        const canvas = document.getElementById('plinkoCanvas');
-        const ctx = canvas.getContext('2d');
-        const startOverlay = document.getElementById('startOverlay');
-        const startButton = document.getElementById('startButton');
-        const gameOverOverlay = document.getElementById('gameOverOverlay');
-        const restartButton = document.getElementById('restartButton');
-        const remainingBallsDisplay = document.getElementById('remainingBalls');
-        const scoreDisplay = document.getElementById('score');
-        const highScoreDisplay = document.getElementById('highScore');
-        const hiScoreDisplay = document.getElementById('hiScoreDisplay');
-        const levelDisplay = document.getElementById('level');
-        const levelUpMessage = document.getElementById('levelUpMessage');
-        const comboText = document.getElementById('comboText');
-        const finalScoreDisplay = document.getElementById('finalScore');
-
-        // === AUDIO ===
-        const dropSound = document.getElementById('dropSound');
-        const bounceSound = document.getElementById('bounceSound');
-        const bonusClickSound = document.getElementById('bonusClickSound');
-        const bonusCompleteSound = document.getElementById('bonusCompleteSound');
-        const powerupSpawnSound = document.getElementById('powerupSpawnSound');
-        const powerupCollectSound = document.getElementById('powerupCollectSound');
-        const explosionSound = document.getElementById('explosionSound');
-        const levelUpSound = document.getElementById('levelUpSound');
-
-        // === PENTATONIC BOUNCE ===
-        const bounceNotes = [0, 3, 5, 7, 10];
-        let currentNote = 0;
-
-        // === COSTANTI ===
-        const CHIODINO_RADIUS = 5, PALLINA_RADIUS = 5;
-        let GRAVITY_Y = 0.5;
-        const ZONE_HEIGHT = 60;
-        const SCORE_ZONES = [-500, 10, 20, 150, -1000, 5000, -1000, 150, 40, 75, -500];
-        const LEVEL_THEMES = [
-            { bg: "#111", peg: "#888", ball: "orange", glow: "#555" },
-            { bg: "#0a0a23", peg: "#00ff41", ball: "#00ffff", glow: "#0f0" },
-            { bg: "#230023", peg: "#ff00ff", ball: "#ff4400", glow: "#f0f" },
-            { bg: "#330000", peg: "#ffff00", ball: "white", glow: "#ff0" }
-        ];
-
-        // === VARIABILI ===
-        let CHIODINI = [], PALLINE = [], BONUS = [], POWERUPS_ACTIVE = [], particles = [];
-        let score = 0, highScore = 0, remainingBalls = 30, gameOver = false;
-        let currentLevel = 0, levelThreshold = 5000;
-        let bonusClickCount = 0, combo = 0, comboMultiplier = 1;
-        let shakeIntensity = 0;
-
-        highScore = parseInt(localStorage.getItem('sadPlinkoHiScore') || '0');
-        highScoreDisplay.innerText = highScore.toString().padStart(6, '0');
-        hiScoreDisplay.innerText = highScore.toString().padStart(6, '0');
-
-        // === RESIZE ===
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            generateChiodini();
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        // === GENERA CHIODINI ===
-        function generateChiodini() {
-            CHIODINI = [];
-            const rows = 18, cols = 22;
-            const spacingX = canvas.width / cols;
-            const spacingY = (canvas.height - ZONE_HEIGHT - 100) / rows;
-            for (let y = 0; y < rows; y++) {
-                for (let x = 0; x < cols; x++) {
-                    const offsetX = (y % 2 === 0) ? spacingX / 2 : 0;
-                    CHIODINI.push({ x: x * spacingX + offsetX, y: y * spacingY + 80, glow: Math.random() * 0.7 + 0.3 });
-                }
-            }
-        }
-
-        // === CREA PALLINA ===
-        function createPallina(x) {
-            if (remainingBalls <= 0 && !gameOver) return;
-            PALLINE.push({ x, y: 10, speedX: (Math.random() - 0.5) * 1, speedY: 0, landed: false, color: LEVEL_THEMES[currentLevel].ball });
-            if (!gameOver) remainingBalls--;
-            remainingBallsDisplay.innerText = remainingBalls;
-            combo++;
-            showCombo();
-            dropSound.currentTime = 0;
-            dropSound.play().catch(() => {});
-        }
-
-        // === RIMBALZO PENTATONICO ===
-        function playBounce() {
-            bounceSound.currentTime = 0;
-            bounceSound.playbackRate = Math.pow(2, bounceNotes[currentNote % 5] / 12);
-            bounceSound.play().catch(() => {});
-            currentNote++;
-        }
-
-        // === UPDATE PALLINE ===
-        function updatePalline() {
-            PALLINE = PALLINE.filter(p => {
-                if (p.landed) return true;
-                p.speedY += GRAVITY_Y;
-                p.y += p.speedY;
-                p.x += p.speedX;
-
-                if (p.x < PALLINA_RADIUS || p.x > canvas.width - PALLINA_RADIUS) p.speedX *= -0.9;
-
-                CHIODINI.forEach(c => {
-                    const dist = Math.hypot(c.x - p.x, c.y - p.y);
-                    if (dist < CHIODINO_RADIUS + PALLINA_RADIUS) {
-                        p.speedY *= -0.8;
-                        p.speedX += (Math.random() - 0.5) * 1.5;
-                        createParticles(p.x, p.y, 3, '#fff');
-                        playBounce();
-                    }
-                });
-
-                if (p.y >= canvas.height - ZONE_HEIGHT) {
-                    p.landed = true;
-                    const zoneWidth = canvas.width / SCORE_ZONES.length;
-                    const zoneIndex = Math.floor(p.x / zoneWidth);
-                    let points = SCORE_ZONES[zoneIndex] || 0;
-                    const total = points * combo * comboMultiplier;
-                    score += total;
-                    showScorePopup(p.x, p.y, total > 0 ? `+${total}` : total);
-                    combo = 0;
-                    hideCombo();
-                }
-                return p.y < canvas.height + 50;
-            });
-        }
-
-        // === CREA BONUS ===
-        function createBonus() {
-            const types = ['circle', 'square', 'triangle'];
-            const type = types[Math.floor(Math.random() * types.length)];
-            const size = type === 'circle' ? 20 : (type === 'square' ? 30 : 25);
-            BONUS.push({ x: Math.random() * (canvas.width - size), y: Math.random() * (canvas.height - ZONE_HEIGHT - size), type, size, clicked: 0, speedX: (Math.random() - 0.5) * 2, speedY: (Math.random() - 0.5) * 2 });
-        }
-
-        // === CREA POWERUP ===
-        function createPowerUp() {
-            const types = ['DOUBLE', 'SLOW', 'MULTI'];
-            const type = types[Math.floor(Math.random() * types.length)];
-            const color = type === 'DOUBLE' ? 'gold' : (type === 'SLOW' ? '#00f' : '#0f0');
-            POWERUPS_ACTIVE.push({ x: Math.random() * canvas.width, y: 0, type, color, vy: 2 });
-        }
-
-        // === PARTICELLE ===
-        function createParticles(x, y, count = 15, color = 'yellow') {
-            for (let i = 0; i < count; i++) {
-                particles.push({ x, y, vx: (Math.random() - 0.5) * 12, vy: (Math**PERFETTO, DR. SUJELU!**  
-**HO VISTO I TUOI MP3 – È UN'OPERA D'ARTE!**  
-**"Brain Massage - S.A.D. Corp.mp3" → GENIO PURO!**
-
----
-
-## **FILE HTML COMPLETO v2.5 – CON I TUOI MP3 ESATTI**
-
-> **COPIA QUESTO CODICE IN `index.html` (in Codespaces)**  
-> **Ctrl + S → SALVA → GIOCO PRONTO!**
-
-```html
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.A.D. | RoboPlinko Xtreme</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { height: 100%; overflow: hidden; font-family: 'Courier New', monospace; background: #000; color: #fff; }
-        canvas { display: block; background: #111; }
-        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; }
-        .overlay h1 { font-size: 60px; margin-bottom: 20px; text-shadow: 0 0 20px #0ff, 0 0 40px #0ff; animation: glitch 2s infinite; }
-        @keyframes glitch { 0%,100% { text-shadow: 0 0 20px #0ff, 0 0 40px #0ff; } 50% { text-shadow: 0 0 30px #f0f, 0 0 60px #f0f; } }
-        button { padding: 15px 30px; font-size: 24px; font-weight: bold; color: #000; background: linear-gradient(45deg, #0ff, #0f0); border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 20px #0ff; }
-        button:hover { transform: scale(1.1); box-shadow: 0 0 40px #0ff; }
-        #info { position: absolute; top: 15px; left: 15px; display: flex; gap: 15px; z-index: 50; }
-        .score-box { background: rgba(0,0,0,0.7); padding: 10px 20px; border-radius: 10px; border: 2px solid #0ff; font-size: 18px; font-weight: bold; min-width: 120px; text-align: center; box-shadow: 0 0 15px #0ff; }
-        .score-zone { position: absolute; bottom: 0; height: 60px; width: 100%; display: flex; border-top: 3px solid #0ff; }
-        .score-zone div { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; background: rgba(0,0,0,0.8); border-left: 1px solid #0ff; border-right: 1px solid #0ff; text-shadow: 0 0 10px #fff; }
-        .level-up { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 80px; font-weight: bold; color: gold; text-shadow: 0 0 30px yellow, 0 0 60px orange; opacity: 0; pointer-events: none; z-index: 90; }
-        .explosion { position: absolute; width: 100px; height: 100px; background: radial-gradient(circle, yellow, orange, red); border-radius: 50%; pointer-events: none; animation: explode 0.6s forwards; z-index: 80; }
-        @keyframes explode { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(4); opacity: 0; } }
-        .score-popup { position: absolute; font-weight: bold; font-size: 24px; color: gold; text-shadow: 0 0 10px #ff0; pointer-events: none; animation: floatUp 1s forwards; z-index: 70; }
-        @keyframes floatUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-50px); opacity: 0; } }
-        .combo-text { position: absolute; top: 80px; left: 50%; transform: translateX(-50%); font-size: 48px; font-weight: bold; color: #ff0; text-shadow: 0 0 20px #ff0; opacity: 0; transition: opacity 0.3s; z-index: 60; }
-        .sad-logo { position: absolute; top: 15px; right: 15px; font-size: 14px; color: #0ff; text-shadow: 0 0 10px #0ff; z-index: 50; opacity: 0.8; }
-        .spotify-btn { position: absolute; bottom: 80px; right: 20px; background: #1DB954; color: white; padding: 15px; border-radius: 50%; font-weight: bold; box-shadow: 0 0 20px #1DB954; cursor: pointer; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-    </style>
-</head>
-<body>
-
-    <canvas id="plinkoCanvas"></canvas>
-
-    <div class="sad-logo">S.A.D. ARCADE DIVISION<br>by Dr.Sujelu</div>
-
-    <div class="overlay" id="startOverlay">
-        <h1>ROBOPLINKO XTREME</h1>
-        <button id="startButton">START GAME</button>
-        <div style="margin-top: 20px; color: #0ff; font-size: 18px;">
-            HI-SCORE: <span id="hiScoreDisplay">000000</span>
-        </div>
-    </div>
-
-    <div class="overlay" id="gameOverOverlay" style="display: none;">
-        <h1>GAME OVER</h1>
-        <div style="margin: 20px 0; font-size: 32px; color: gold;">
-            SCORE: <span id="finalScore">0</span>
-        </div>
-        <button id="restartButton">VENDETTA</button>
-    </div>
-
-    <div id="info">
-        <div class="score-box">Palline: <span id="remainingBalls">30</span></div>
-        <div class="score-box">Score: <span id="score">0</span></div>
-        <div class="score-box">Picco: <span id="highScore">0</span></div>
-        <div class="score-box">Livello: <span id="level">1</span></div>
-    </div>
-
-    <div class="score-zone">
-        <div>-500</div><div>+10</div><div>+20</div><div>150</div>
-        <div>-1000</div><div>5000</div><div>-1000</div><div>150</div>
-        <div>40</div><div>75</div><div>-500</div>
-    </div>
-
-    <div class="level-up" id="levelUpMessage">LEVEL UP!</div>
-    <div class="combo-text" id="comboText"></div>
-
-    <button class="spotify-btn" onclick="streamToUnlock()">STREAM = +5</button>
-
-    <!-- AUDIO MP3 - I TUOI NOMI ESATTI -->
-    <audio id="dropSound" src="audio/탭 Screen Lancio pallina.wav" preload="auto"></audio>
-    <audio id="bounceSound" src="audio/솔디스치노04.wav" preload="auto"></audio>
     <audio id="bonusClickSound" src="audio/bonus_click.wav" preload="auto"></audio>
     <audio id="bonusCompleteSound" src="audio/ballad.wav" preload="auto"></audio>
     <audio id="powerupSpawnSound" src="audio/powerup_spawn.wav" preload="auto"></audio>
@@ -330,6 +85,9 @@
     <audio id="explosionSound" src="audio/esplosione multiball.wav" preload="auto"></audio>
     <audio id="levelUpSound" src="audio/Brain Massage - S.A.D. Corp.mp3" preload="auto"></audio>
 
+    <!-- SOUNDTRACK DI FONDO -->
+    <audio id="bgTrack" preload="auto" loop></audio>
+
     <script>
         // === ELEMENTI ===
         const canvas = document.getElementById('plinkoCanvas');
@@ -346,6 +104,7 @@
         const levelUpMessage = document.getElementById('levelUpMessage');
         const comboText = document.getElementById('comboText');
         const finalScoreDisplay = document.getElementById('finalScore');
+        const trackInfo = document.getElementById('trackInfo');
 
         // === AUDIO ===
         const dropSound = document.getElementById('dropSound');
@@ -356,6 +115,9 @@
         const powerupCollectSound = document.getElementById('powerupCollectSound');
         const explosionSound = document.getElementById('explosionSound');
         const levelUpSound = document.getElementById('levelUpSound');
+        const bgTrack = document.getElementById('bgTrack');
+
+        let audioUnlocked = false;
 
         // === PENTATONIC BOUNCE ===
         const bounceNotes = [0, 3, 5, 7, 10];
@@ -364,7 +126,7 @@
         // === COSTANTI ===
         const CHIODINO_RADIUS = 5, PALLINA_RADIUS = 5;
         let GRAVITY_Y = 0.5;
-        const ZONE_HEIGHT = 60;
+        const ZONE_HEIGHT = 70;
         const SCORE_ZONES = [-500, 10, 20, 150, -1000, 5000, -1000, 150, 40, 75, -500];
         const LEVEL_THEMES = [
             { bg: "#111", peg: "#888", ball: "orange", glow: "#555" },
@@ -376,11 +138,11 @@
         // === VARIABILI ===
         let CHIODINI = [], PALLINE = [], BONUS = [], POWERUPS_ACTIVE = [], particles = [];
         let score = 0, highScore = 0, remainingBalls = 30, gameOver = false;
-        let currentLevel = 0, levelThreshold = 5000;
-        let bonusClickCount = 0, combo = 0, comboMultiplier = 1;
+        let currentLevel = 1, levelThreshold = 8000;
+        let combo = 0, comboMultiplier = 1;
         let shakeIntensity = 0;
 
-        highScore = parseInt(localStorage.getItem('sadPlinkoHiScore') || '0');
+        highScore = parseInt(localStorage.getItem('sadClassicHiScore') || '0');
         highScoreDisplay.innerText = highScore.toString().padStart(6, '0');
         hiScoreDisplay.innerText = highScore.toString().padStart(6, '0');
 
@@ -402,16 +164,16 @@
             for (let y = 0; y < rows; y++) {
                 for (let x = 0; x < cols; x++) {
                     const offsetX = (y % 2 === 0) ? spacingX / 2 : 0;
-                    CHIODINI.push({ x: x * spacingX + offsetX, y: y * spacingY + 80, glow: Math.random() * 0.7 + 0.3 });
+                    CHIODINI.push({ x: x * spacingX + offsetX, y: y * spacingY + 80, glow: Math.random() * 0.5 + 0.3 });
                 }
             }
         }
 
         // === CREA PALLINA ===
         function createPallina(x) {
-            if (remainingBalls <= 0 && !gameOver) return;
-            PALLINE.push({ x, y: 10, speedX: (Math.random() - 0.5) * 1, speedY: 0, landed: false, color: LEVEL_THEMES[currentLevel].ball });
-            if (!gameOver) remainingBalls--;
+            if (remainingBalls <= 0 || gameOver) return;
+            PALLINE.push({ x, y: 10, speedX: (Math.random() - 0.5) * 1, speedY: 0, landed: false, color: LEVEL_THEMES[(currentLevel-1) % LEVEL_THEMES.length].ball });
+            remainingBalls--;
             remainingBallsDisplay.innerText = remainingBalls;
             combo++;
             showCombo();
@@ -425,6 +187,23 @@
             bounceSound.playbackRate = Math.pow(2, bounceNotes[currentNote % 5] / 12);
             bounceSound.play().catch(() => {});
             currentNote++;
+        }
+
+        // === CAMBIO TRACCIA DI FONDO ===
+        const bgTracks = [
+            "audio/Dr.Sujelu_The Golden Element - 125bpm.mp3",
+            "audio/Fire Fish.wav",
+            "audio/Rock n Roll.mp3",
+            "audio/Brain Massage - S.A.D. Corp.mp3"
+        ];
+        function playBgTrack() {
+            const trackSrc = bgTracks[(currentLevel - 1) % bgTracks.length];
+            bgTrack.src = trackSrc;
+            bgTrack.load();
+            bgTrack.loop = true;
+            bgTrack.volume = 0.6;
+            bgTrack.play().catch(() => {});
+            trackInfo.innerText = `Livello ${currentLevel} – ${trackSrc.split('/').pop().split('.')[0]}`;
         }
 
         // === UPDATE PALLINE ===
@@ -441,8 +220,8 @@
                     const dist = Math.hypot(c.x - p.x, c.y - p.y);
                     if (dist < CHIODINO_RADIUS + PALLINA_RADIUS) {
                         p.speedY *= -0.8;
-                        p.speedX += (Math.random() - 0.5) * 1.5;
-                        createParticles(p.x, p.y, 3, '#fff');
+                        p.speedX += (Math.random() - 0.5) * 1.2;
+                        createParticles(p.x, p.y, 1, '#fff'); // SCINTILLE RIDOTTE
                         playBounce();
                     }
                 });
@@ -477,9 +256,9 @@
             POWERUPS_ACTIVE.push({ x: Math.random() * canvas.width, y: 0, type, color, vy: 2 });
         }
 
-        function createParticles(x, y, count = 15, color = 'yellow') {
+        function createParticles(x, y, count = 1, color = 'yellow') {
             for (let i = 0; i < count; i++) {
-                particles.push({ x, y, vx: (Math.random() - 0.5) * 12, vy: (Math.random() - 0.5) * 12, life: 1, color });
+                particles.push({ x, y, vx: (Math.random() - 0.5) * 6, vy: (Math.random() - 0.5) * 6, life: 0.5, color });
             }
         }
 
@@ -493,28 +272,25 @@
         }
 
         function updatePowerUps() {
-            POWERUPS_ACTIVE = POWERUPS_ACTIVE.filter(pu => {
-                pu.y += pu.vy;
-                return pu.y < canvas.height;
-            });
+            POWERUPS_ACTIVE = POWERUPS_ACTIVE.filter(pu => pu.y < canvas.height);
         }
 
         function updateParticles() {
             particles = particles.filter(p => {
-                p.x += p.vx; p.y += p.vy; p.vx *= 0.98; p.vy *= 0.98; p.life -= 0.02;
+                p.x += p.vx; p.y += p.vy; p.vx *= 0.98; p.vy *= 0.98; p.life -= 0.03;
                 return p.life > 0;
             });
         }
 
         // === DRAW ===
         function drawChiodini() {
-            const theme = LEVEL_THEMES[currentLevel];
+            const theme = LEVEL_THEMES[(currentLevel-1) % LEVEL_THEMES.length];
             CHIODINI.forEach(c => {
                 ctx.beginPath();
                 ctx.arc(c.x, c.y, CHIODINO_RADIUS, 0, Math.PI*2);
                 ctx.fillStyle = theme.peg;
                 ctx.shadowColor = theme.glow;
-                ctx.shadowBlur = c.glow * 25;
+                ctx.shadowBlur = c.glow * 20;
                 ctx.fill();
                 ctx.shadowBlur = 0;
                 ctx.strokeStyle = '#333';
@@ -529,6 +305,7 @@
                 ctx.fillStyle = p.color;
                 ctx.fill();
                 ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 1.5;
                 ctx.stroke();
             });
         }
@@ -537,7 +314,7 @@
             particles.forEach(p => {
                 ctx.globalAlpha = p.life;
                 ctx.fillStyle = p.color;
-                ctx.fillRect(p.x - 2, p.y - 2, 4, 4);
+                ctx.fillRect(p.x - 1.5, p.y - 1.5, 3, 3);
             });
             ctx.globalAlpha = 1;
         }
@@ -550,12 +327,14 @@
             el.style.left = x + 'px';
             el.style.top = (y - 20) + 'px';
             document.body.appendChild(el);
-            setTimeout(() => el.remove(), 1000);
+            setTimeout(() => el.remove(), 1200);
         }
 
         function showLevelUp() {
             levelUpMessage.style.opacity = 1;
             setTimeout(() => levelUpMessage.style.opacity = 0, 1500);
+            levelUpSound.currentTime = 0;
+            levelUpSound.play().catch(() => {});
         }
 
         function showCombo() {
@@ -585,7 +364,7 @@
                 highScore = displayScore;
                 highScoreDisplay.innerText = highScore.toString().padStart(6, '0');
                 hiScoreDisplay.innerText = highScore.toString().padStart(6, '0');
-                localStorage.setItem('sadPlinkoHiScore', highScore);
+                localStorage.setItem('sadClassicHiScore', highScore);
             }
         }
 
@@ -594,11 +373,17 @@
                 gameOver = true;
                 finalScoreDisplay.innerText = Math.floor(score * comboMultiplier);
                 gameOverOverlay.style.display = 'flex';
+                bgTrack.pause();
             }
         }
 
         // === CLICK HANDLER ===
         canvas.addEventListener('click', e => {
+            if (!audioUnlocked) {
+                audioUnlocked = true;
+                playBgTrack();
+            }
+
             const rect = canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
@@ -611,7 +396,7 @@
                     powerupCollectSound.currentTime = 0;
                     powerupCollectSound.play().catch(() => {});
                     activatePowerUp(pu.type);
-                    createParticles(x, y, 25, pu.color);
+                    createParticles(x, y, 15, pu.color);
                     POWERUPS_ACTIVE.splice(i, 1);
                     break;
                 }
@@ -628,6 +413,8 @@
                         BONUS.splice(i, 1);
                         bonusCompleteSound.currentTime = 0;
                         bonusCompleteSound.play().catch(() => {});
+                        remainingBalls = Math.min(remainingBalls + 3, 30);
+                        remainingBallsDisplay.innerText = remainingBalls;
                     }
                     break;
                 }
@@ -639,19 +426,7 @@
         function activatePowerUp(type) {
             if (type === 'DOUBLE') { comboMultiplier = 2; setTimeout(() => comboMultiplier = 1, 10000); }
             else if (type === 'SLOW') { GRAVITY_Y = 0.25; setTimeout(() => GRAVITY_Y = 0.5, 8000); }
-            else if (type === 'MULTI') { remainingBalls += 5; remainingBallsDisplay.innerText = remainingBalls; }
-        }
-
-        // === STREAM TO UNLOCK – BRAIN MASSAGE ===
-        function streamToUnlock() {
-            const brainMassageTrack = "https://open.spotify.com/track/2a3bXyRz3iUi6dTZCvPO59";
-            window.open(brainMassageTrack, '_blank');
-            setTimeout(() => {
-                remainingBalls += 5;
-                remainingBallsDisplay.innerText = remainingBalls;
-                showScorePopup(canvas.width/2, 100, '+5 BALLS (Brain Massage!)');
-                createParticles(canvas.width/2, 100, 30, '#1DB954');
-            }, 30000);
+            else if (type === 'MULTI') { remainingBalls = Math.min(remainingBalls + 5, 30); remainingBallsDisplay.innerText = remainingBalls; }
         }
 
         // === GAME LOOP ===
@@ -661,19 +436,19 @@
             ctx.save();
             applyShake();
 
-            ctx.fillStyle = LEVEL_THEMES[currentLevel].bg;
+            const theme = LEVEL_THEMES[(currentLevel-1) % LEVEL_THEMES.length];
+            ctx.fillStyle = theme.bg;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             if (score >= levelThreshold) {
-                currentLevel = Math.min(currentLevel + 1, LEVEL_THEMES.length - 1);
+                currentLevel++;
                 levelThreshold += 8000;
-                levelDisplay.innerText = currentLevel + 1;
+                levelDisplay.innerText = currentLevel;
                 showLevelUp();
-                createParticles(canvas.width/2, 100, 60, 'gold');
-                shakeIntensity = 15;
+                createParticles(canvas.width/2, 100, 30, 'gold');
+                shakeIntensity = 12;
                 createPowerUp();
-                levelUpSound.currentTime = 0;
-                levelUpSound.play().catch(() => {});
+                playBgTrack();
             }
 
             updatePalline();
@@ -695,8 +470,8 @@
         // === AVVIO ===
         function startGame() {
             score = 0; remainingBalls = 30; gameOver = false;
-            currentLevel = 0; levelThreshold = 5000;
-            combo = 0; comboMultiplier = 1; bonusClickCount = 0;
+            currentLevel = 1; levelThreshold = 8000;
+            combo = 0; comboMultiplier = 1;
             PALLINE = []; BONUS = []; POWERUPS_ACTIVE = []; particles = [];
             GRAVITY_Y = 0.5; currentNote = 0;
 
@@ -714,12 +489,11 @@
             requestAnimationFrame(update);
         }
 
-        startButton.addEventListener('click', startGame);
+        startButton.addEventListener('click', () => {
+            audioUnlocked = true;
+            startGame();
+        });
         restartButton.addEventListener('click', startGame);
-
-        // === RESIZE ===
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
     </script>
 </body>
 </html>
