@@ -69,15 +69,14 @@
     <div class="track-info" id="trackInfo">Livello 1 – Intro</div>
 
     <!-- AUDIO – NOMI RINOMINATI -->
-    <audio id="dropSound" src="bounce5.wav" preload="auto"></audio>
+    <audio id="dropSound" src="powerup_spawn.wav" preload="auto"></audio>
     <audio id="bounceSound" src="powerup_collect.wav" preload="auto"></audio>
     <audio id="bonusClickSound" src="bonus_click.wav" preload="auto"></audio>
     <audio id="bonusCompleteSound" src="bonus_complete.wav" preload="auto"></audio>
     <audio id="powerupSpawnSound" src="powerup_spawn.wav" preload="auto"></audio>
     <audio id="powerupCollectSound" src="powerup_collect.wav" preload="auto"></audio>
     <audio id="explosionSound" src="explosion.wav" preload="auto"></audio>
-    <audio id="levelUpSound" src="bg1.mp3" preload="auto"></audio>
-    <audio id="bgTrack" src="bg2.mp3" preload="auto"></audio>
+    <audio id="levelUpSound" src="level_up.wav" preload="auto"></audio>
     <audio id="bgTrack" preload="auto" loop></audio>
 
     <script>
@@ -190,7 +189,7 @@
         function playBgTrack() {
             if (!audioUnlocked) return;
             const track = bgTracks[(currentLevel - 1) % bgTracks.length];
-            bgTrack.src = "audio/" + track;
+            bgTrack.src = "../" + track;
             bgTrack.load();
             bgTrack.loop = true;
             bgTrack.volume = 0.6;
