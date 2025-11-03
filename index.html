@@ -35,7 +35,7 @@
     <div class="debug" id="debug">Audio: In attesa...</div>
 
     <div class="overlay" id="startOverlay">
-        <h1>ROBOPLINKO 03</h1>
+        <h1>ROBOPLINKO 04</h1>
         <h2 style="font-size: 32px; color: #0ff; margin-bottom: 20px;">EXTREME</h2>
         <button id="startButton">INIZIA</button>
         <div style="margin-top: 30px; color: #0ff; font-size: 20px;">
@@ -134,9 +134,9 @@
             sounds[key] = audio;
         });
 
-        // Sblocca audio al primo click
-        canvas.addEventListener('click', unlockAudio, { once: true });
+        // Sblocca audio al click su "INIZIA"
         function unlockAudio() {
+            if (audioUnlocked) return;
             audioUnlocked = true;
             debug.innerText = "Audio: Sbloccato!";
             debug.style.color = "#0f0";
@@ -404,10 +404,11 @@
         highScoreDisplay.innerText = highScore.toString().padStart(6, '0');
         hiScoreDisplay.innerText = highScore.toString().padStart(6, '0');
 
+        // === AVVIO CORRETTO ===
         startButton.addEventListener('click', () => {
             startOverlay.style.display = 'none';
-            unlockAudio();
-            gameLoop();
+            unlockAudio();  // Sblocca audio
+            gameLoop();     // Avvia gioco
         });
 
         restartButton.addEventListener('click', () => {
@@ -415,8 +416,8 @@
         });
 
         canvas.addEventListener('click', (e) => {
-            if (gameOver) return;
-            const rect = canvas.getBoundingClientRect();  // CORRETTO!
+            if (gameOver || !audioUnlocked) return;
+            const rect = canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
             createPallina(x);
         });
