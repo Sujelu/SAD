@@ -32,12 +32,12 @@
     <canvas id="plinkoCanvas"></canvas>
 
     <div class="sad-logo">S.A.D. EXTREME<br>by Dr.Sujelu</div>
-    <div class="debug" id="debug">Audio: Bloccato</div>
+    <div class="debug" id="debug">S.A.D.</div>
 
     <div class="overlay" id="startOverlay">
-        <h1>RoboPlink0</h1>
-        <h2 style="font-size: 32px; color: #0ff; margin-bottom: 20px;">ExtremE</h2>
-        <button id="startButton">Buttale fuori!</button>
+        <h1>RoboPlink0 ExtremE</h1>
+        <h2 style="font-size: 32px; color: #0ff; margin-bottom: 20px;">S.A.D. Sujelu Arcade Division</h2>
+        <button id="startButton">Buttale Dentro!</button>
         <div style="margin-top: 30px; color: #0ff; font-size: 20px;">
             HI-SCORE: <span id="hiScoreDisplay">000000</span>
         </div>
@@ -193,7 +193,7 @@
         }
 
         // BACKGROUND TRACK
-        const bgTracks = ["bg1.mp3", "bg2.wav", "bg3.mp3"];
+        const bgTracks = ["bg1.mp3", "bg2.mp3", "bg3.mp3"];
         function playBgTrack() {
             if (!audioUnlocked) return;
             const track = bgTracks[(currentLevel - 1) % bgTracks.length];
