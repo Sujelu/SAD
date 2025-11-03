@@ -32,11 +32,11 @@
     <canvas id="plinkoCanvas"></canvas>
 
     <div class="sad-logo">S.A.D. ARCADE<br>by Dr.Sujelu</div>
-    <div class="debug" id="debug">Audio: In attesa...</div>
+    <div class="debug" id="debug">Sujelu Arcade Division/div>
 
     <div class="overlay" id="startOverlay">
-        <h1>ROBOPLINKO Z</h1>
-        <h2 style="font-size: 32px; color: #0ff; margin-bottom: 20px;">EXTREME</h2>
+        <h1>RoboPlinko ExtremE</h1>
+        <h2 style="font-size: 32px; color: #0ff; margin-bottom: 20px;">S.A.D.</h2>
         <button id="startButton">INIZIA</button>
         <div style="margin-top: 30px; color: #0ff; font-size: 20px;">
             HI-SCORE: <span id="hiScoreDisplay">000000</span>
@@ -68,7 +68,7 @@
     <div class="combo-text" id="comboText"></div>
     <div class="track-info" id="trackInfo">Livello 1 – Intro</div>
 
-    <!-- AUDIO -->
+    <!-- AUDIO – PERCORSO CORRETTO: SAD/audio/ -->
     <audio id="dropSound" preload="auto"></audio>
     <audio id="bounce1" preload="auto"></audio>
     <audio id="bounce2" preload="auto"></audio>
@@ -110,20 +110,20 @@
         let audioUnlocked = false;
         let currentBounce = 0;
 
-        // === AUDIO ===
+        // === AUDIO – PERCORSO CORRETTO: SAD/audio/ ===
         const audioFiles = {
-            dropSound: "audio/drop.wav",
-            bounce1: "audio/bounce1.wav",
-            bounce2: "audio/bounce2.wav",
-            bounce3: "audio/bounce3.wav",
-            bounce4: "audio/bounce4.wav",
-            bounce5: "audio/bounce5.wav",
-            bonusClickSound: "audio/bonus_click.wav",
-            bonusCompleteSound: "audio/bonus_complete.mp3",
-            powerupCollectSound: "audio/powerup_collect.wav",
-            explosionSound: "audio/explosion.wav",
-            levelUpSound: "audio/level_up.wav",
-            gameOverSound: "audio/game_over.mp3"
+            dropSound: "drop.wav",
+            bounce1: "bounce1.wav",
+            bounce2: "bounce2.wav",
+            bounce3: "bounce3.wav",
+            bounce4: "bounce4.wav",
+            bounce5: "bounce5.wav",
+            bonusClickSound: "bonus_click.wav",
+            bonusCompleteSound: "bonus_complete.mp3",
+            powerupCollectSound: "powerup_collect.wav",
+            explosionSound: "explosion.wav",
+            levelUpSound: "level_up.wav",
+            gameOverSound: "game_over.mp3"
         };
 
         const sounds = {};
@@ -134,7 +134,6 @@
             sounds[key] = audio;
         });
 
-        // Sblocca audio al click su "INIZIA"
         function unlockAudio() {
             if (audioUnlocked) return;
             audioUnlocked = true;
@@ -166,7 +165,7 @@
             if (!audioUnlocked) return;
             const track = bgTracks[(currentLevel - 1) % bgTracks.length];
             const bg = sounds.bgTrack;
-            bg.src = "audio/" + track;
+            bg.src = "SAD/audio/" + track;  // PERCORSO CORRETTO
             bg.load();
             bg.volume = 0.6;
             bg.play().catch(() => {});
@@ -404,11 +403,10 @@
         highScoreDisplay.innerText = highScore.toString().padStart(6, '0');
         hiScoreDisplay.innerText = highScore.toString().padStart(6, '0');
 
-        // === AVVIO CORRETTO ===
         startButton.addEventListener('click', () => {
             startOverlay.style.display = 'none';
-            unlockAudio();  // Sblocca audio
-            gameLoop();     // Avvia gioco
+            unlockAudio();
+            gameLoop();
         });
 
         restartButton.addEventListener('click', () => {
