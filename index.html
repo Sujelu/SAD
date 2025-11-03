@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+o<!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
@@ -34,7 +34,7 @@
 
     <div class="overlay" id="startOverlay">
         <h1>RoboPlink0</h1>
-        <h1>_ E x t r e m E _</h1>
+        <h1> E x t r e m E !</h1>
         <audio id="bgTrack" src="bg1.mp3" preload="auto"></audio>
         <h2 style="font-size: 32px; color: #0ff; margin-bottom: 20px;">Sujelu_Arcade_Division" </h2>
         <button id="startButton">Shot!</button>
@@ -69,6 +69,13 @@
     <div class="track-info" id="trackInfo">Livello 1 – Intro</div>
 
     <!-- AUDIO – NOMI RINOMINATI -->
+<audio id="dropSound" src="bg1.mp3" preload="auto"></audio>
+
+  <script>
+    const dropSound = document.getElementById("dropSound");
+    dropSound.volume = 0.7; // diminuito del 30%
+    dropSound.play(); // facoltativo: avvia la riproduzione
+  </script>
     <audio id="dropSound" src="bonus_click.wav" preload="auto"></audio>
     <audio id="bounceSound" src="powerup_collect.wav" preload="auto"></audio>
     <audio id="bonusClickSound" src="bonus_click.wav" preload="auto"></audio>
@@ -76,7 +83,7 @@
     <audio id="powerupSpawnSound" src="powerup_spawn.wav" preload="auto"></audio>
     <audio id="powerupCollectSound" src="powerup_collect.wav" preload="auto"></audio>
     <audio id="explosionSound" src="explosion.wav" preload="auto"></audio>
-    <audio id="levelUpSound" src="bg1.mp3" preload="auto"></audio>
+    <audio id="levelUpSound" src="explosion.wav" preload="auto"></audio>
     <audio id="levelUpSound" src="level_up.wav" preload="auto"></audio>
     <audio id="bgTrack" preload="auto" loop>bg1.mp3</audio>
 
