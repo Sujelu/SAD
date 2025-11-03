@@ -34,7 +34,7 @@
 
     <div class="overlay" id="startOverlay">
         <h1>_RoboPlink0_</h1>
-        <h1>ExtremE!</h1>
+        <h1>§_ExtremE!_§</h1>
         
         <h2 style="font-size: 32px; color: #0ff; margin-bottom: 20px;">- S.A.D. -"</h2>
         <button id="startButton">Shot!</button>
@@ -69,7 +69,7 @@
     <div class="track-info" id="trackInfo">Livello 1 – Intro</div>
 
     <!-- AUDIO – NOMI RINOMINATI -->
-    <audio id="dropSound" src="powerup_spawn.wav" preload="auto"></audio>
+    <audio id="dropSound" src="bonus_click.wav" preload="auto"></audio>
     <audio id="bounceSound" src="powerup_collect.wav" preload="auto"></audio>
     <audio id="bonusClickSound" src="bonus_click.wav" preload="auto"></audio>
     <audio id="bonusCompleteSound" src="bonus_complete.wav" preload="auto"></audio>
@@ -77,7 +77,7 @@
     <audio id="powerupCollectSound" src="powerup_collect.wav" preload="auto"></audio>
     <audio id="explosionSound" src="explosion.wav" preload="auto"></audio>
     <audio id="levelUpSound" src="level_up.wav" preload="auto"></audio>
-    <audio id="bgTrack" preload="auto" loop></audio>
+    <audio id="bgTrack" preload="auto" loop>bg1.mp3</audio>
 
     <script>
         // === ELEMENTI ===
@@ -114,8 +114,8 @@
         let currentNote = 0;
 
         // === COSTANTI ===
-        const CHIODINO_RADIUS = 5, PALLINA_RADIUS = 5;
-        let GRAVITY_Y = 0.5;
+        const CHIODINO_RADIUS = 4, PALLINA_RADIUS = 2;
+        let GRAVITY_Y = 0.9;
         const ZONE_HEIGHT = 70;
         const SCORE_ZONES = [-500, 10, 20, 0, -1000, 5000, -1000, 0, 40, 75, 0];
         const BALL_ZONES = [3, 7, 10];
@@ -149,7 +149,7 @@
         // === GENERA CHIODINI ===
         function generateChiodini() {
             CHIODINI = [];
-            const rows = 18, cols = 22;
+            const rows = 15, cols = 18;
             const spacingX = canvas.width / cols;
             const spacingY = (canvas.height - ZONE_HEIGHT - 100) / rows;
             for (let y = 0; y < rows; y++) {
@@ -189,7 +189,7 @@
         function playBgTrack() {
             if (!audioUnlocked) return;
             const track = bgTracks[(currentLevel - 1) % bgTracks.length];
-            bgTrack.src = "../" + track;
+            bgTrack.src = "/" + track;
             bgTrack.load();
             bgTrack.loop = true;
             bgTrack.volume = 0.6;
